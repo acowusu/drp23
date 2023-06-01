@@ -1,9 +1,22 @@
+<script lang="ts">
+import { NMessageProvider } from "naive-ui";
+import { defineComponent } from "vue";
+
+export default defineComponent({
+  name: "App",
+  components: {
+    NMessageProvider,
+  },
+});
+</script>
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view />
+  <n-message-provider>
+    <nav>
+      <router-link to="/">Browse Events</router-link> |
+      <router-link to="/create">Create Event</router-link>
+    </nav>
+    <router-view />
+  </n-message-provider>
 </template>
 
 <style lang="scss">
