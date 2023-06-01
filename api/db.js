@@ -10,7 +10,7 @@ pg.types.setTypeParser(1700, "text", parseFloat);
 const { Pool } = pg;
 
 const config = {
-  user: process.env.db_username,
+  user: process.env.db_user,
   password: process.env.db_password,
   host: process.env.db_host,
   database: process.env.db_database,
@@ -20,16 +20,15 @@ const config = {
   // },
   //For secure connection:
   ssl: {
-    ca: fs.readFileSync("./ca.crt").toString(),
+    ca: fs.readFileSync("api/ca.crt").toString(),
   },
 };
-console.log(process.env);
 module.exports = class db {
   constructor() {
     this.pool = new Pool(config);
   }
   getClient() {
-    return this.pool.connect()
+    return this.pool.connect();
   }
   execute(query = "SELECT NOW();") {
     return this.pool.connect().then((client) =>
@@ -37,13 +36,14 @@ module.exports = class db {
         .query(query)
         .then((res) => {
           console.log("result");
-          client.release();
-          console.log(res.rows[0]);
-          return res.rows[0];
+          console.log(res.rows?.[0] || true);
+          return res.rows?.[0] || true;
         })
         .catch((err) => {
-          client.release();
           console.log(err.stack);
+        })
+        .finally(() => {
+          client.release();
         })
     );
   }
@@ -80,5 +80,20 @@ module.exports = class db {
           console.log(err.stack);
         });
     });
+  }
+  reset(force) {
+    if (process.env.VERCEL_ENV != "development" && !force) {
+      console.error("UNABLE TO RESET PRODUCTION DEPLOYMENT");
+      throw "UNABLE TO RESET PRODUCTION DEPLOYMENT";
+    }
+    const schema = fs.readFileSync("sql/schema.sql", {
+      encoding: "utf8",
+      flag: "r",
+    });
+    const test_data = fs.readFileSync("sql/test_data.sql", {
+      encoding: "utf8",
+      flag: "r",
+    });
+    return this.execute(schema + "\n\n" + test_data);
   }
 };

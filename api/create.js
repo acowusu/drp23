@@ -5,20 +5,7 @@ const EventMaker = require("./eventMaker");
 
 module.exports = async (req, res) => {
   const {
-    query: { name,
-      description,
-      thumbnail,
-      society,
-      location,
-      start_datetime,
-      price,
-      latitude,
-      longitude, },
-  } = req;
-  const Maker = new EventMaker({ db });
-
-  try {
-    Maker.create({
+    body: {
       name,
       description,
       thumbnail,
@@ -27,15 +14,31 @@ module.exports = async (req, res) => {
       start_datetime,
       price,
       latitude,
-      longitude
-    })
+      longitude,
+      tags,
+    },
+  } = req;
+  const Maker = new EventMaker({ db });
+
+  try {
+    await Maker.create({
+      name,
+      description,
+      thumbnail,
+      society,
+      location,
+      start_datetime,
+      price,
+      latitude,
+      longitude,
+      tags,
+    });
     res.json({
-      success: false
-    })
+      success: true,
+    });
   } catch {
     res.status(400).json({
-      success: false
-    })
+      success: false,
+    });
   }
-
 };
