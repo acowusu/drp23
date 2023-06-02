@@ -1,0 +1,11 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "algoliasearch": "^4.17.1",
+    "pg": "^8.7.1",
+    "vue-instantsearch": "^4.10.1"
+  }
+}
