@@ -4,6 +4,6 @@ const db = new Database();
 const QueryBuilder = require("./_eventSearcher");
 
 module.exports = async (req, res) => {
-  const query = new QueryBuilder({db});
+  const query = new QueryBuilder({ db });
   res.json(await query.allEvents());
 };
