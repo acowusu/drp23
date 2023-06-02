@@ -26,7 +26,7 @@ const config = {
   },
   //For secure connection:
   // ssl: {
-  //   ca: fs.readFileSync("api/ca.crt").toString(),
+  //   ca: fs.readFileSync(__dirname + "/ca.crt").toString(),
   // },
 };
 module.exports = class db {
@@ -96,18 +96,21 @@ module.exports = class db {
       console.error("UNABLE TO RESET PRODUCTION DEPLOYMENT");
       throw "UNABLE TO RESET PRODUCTION DEPLOYMENT";
     }
-    const schema = fs.readFileSync("sql/schema.sql", {
+    const schema = fs.readFileSync(__dirname + "/../sql/schema.sql", {
       encoding: "utf8",
       flag: "r",
     });
-    const test_data = fs.readFileSync("sql/test_data.sql", {
+    const test_data = fs.readFileSync(__dirname + "/../sql/test_data.sql", {
       encoding: "utf8",
       flag: "r",
     });
-    const searchableData = fs.readFileSync("algolia/baseData.json", {
-      encoding: "utf8",
-      flag: "r",
-    });
+    const searchableData = fs.readFileSync(
+      __dirname + "/../algolia/baseData.json",
+      {
+        encoding: "utf8",
+        flag: "r",
+      }
+    );
 
     return Promise.all([
       this.execute(schema + "\n\n" + test_data),
