@@ -21,13 +21,13 @@ const config = {
   host: process.env.db_host,
   database: process.env.db_database,
   port: +process.env.db_port,
-  // ssl: {
-  //   rejectUnauthorized: false,
-  // },
-  //For secure connection:
   ssl: {
-    ca: fs.readFileSync("api/ca.crt").toString(),
+    rejectUnauthorized: false,
   },
+  //For secure connection:
+  // ssl: {
+  //   ca: fs.readFileSync("api/ca.crt").toString(),
+  // },
 };
 module.exports = class db {
   constructor() {
