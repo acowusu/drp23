@@ -4,6 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "pg": "^8.7.1"
+    "algoliasearch": "^4.17.1",
+    "pg": "^8.7.1",
+    "vue-instantsearch": "^4.10.1"
   }
 }

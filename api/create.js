@@ -1,7 +1,7 @@
-const Database = require("./db");
+const Database = require("./_db");
 const db = new Database();
 
-const EventMaker = require("./eventMaker");
+const EventMaker = require("./_eventMaker");
 
 module.exports = async (req, res) => {
   const {
@@ -12,7 +12,7 @@ module.exports = async (req, res) => {
       society,
       location,
       start_datetime,
-      price,
+      ticket_price,
       latitude,
       longitude,
       tags,
@@ -21,20 +21,21 @@ module.exports = async (req, res) => {
   const Maker = new EventMaker({ db });
 
   try {
-    await Maker.create({
+    const event_id = await Maker.create({
       name,
       description,
       thumbnail,
       society,
       location,
       start_datetime,
-      price,
+      ticket_price,
       latitude,
       longitude,
       tags,
     });
     res.json({
       success: true,
+      event_id,
     });
   } catch {
     res.status(400).json({

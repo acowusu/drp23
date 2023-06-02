@@ -3,7 +3,7 @@
     <template #cover>
       <img :src="data.image_url" />
     </template>
-    <template #header-extra> {{ data.organizer }} </template>
+    <template #header-extra> {{ data.society }} </template>
     <n-tag
       rounded
       :bordered="false"
@@ -25,23 +25,29 @@
     <n-space>
       <n-tag v-for="tag in data.tags" :key="tag">{{ tag }}</n-tag>
     </n-space>
+    <template #footer>
+      <router-link :to="`/event/${data?.event_id || data?.objectID}`">
+        view
+      </router-link>
+    </template>
   </n-card>
 </template>
 
 <script lang="ts">
-import { NCard, NDivider, NSpace, NTag, NEllipsis } from "naive-ui";
+import { NCard, NDivider, NEllipsis, NSpace, NTag } from "naive-ui";
 import { defineComponent } from "vue";
 interface EventPayload {
   name: string;
   description: string;
   image_url: string;
-  organizer: string;
+  society: string;
   location: string;
   date_time: string;
   ticket_price: number;
   latitude: number;
   longitude: number;
-  id: number;
+  event_id?: string;
+  objectID?: string;
   tags: string[];
 }
 

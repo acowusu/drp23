@@ -21,7 +21,7 @@ CREATE TABLE events (
     latitude NUMERIC(9, 6),
     longitude NUMERIC(9, 6),
     start_datetime TIMESTAMP,
-    price NUMERIC(10, 2)
+    ticket_price NUMERIC(10, 2)
 );
 
 CREATE TABLE eventTags (

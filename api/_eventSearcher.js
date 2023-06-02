@@ -1,9 +1,7 @@
 module.exports = class {
   constructor({ db }) {
-
     this.db = db;
   }
-
 
   searchWithSociety() {
     return this.db.getRows(
@@ -15,7 +13,7 @@ module.exports = class {
        e.society,
        e.location,
        e.start_datetime,
-       e.price,
+       e.ticket_price,
        e.latitude,
        e.longitude,
        t.tag_id,
@@ -31,6 +29,7 @@ module.exports = class {
     );
   }
   searchWithoutSociety() {
+    console.log("searching");
     return this.db.getRows(
       /*sql */ `
       SELECT e.event_id,
@@ -40,7 +39,7 @@ module.exports = class {
        e.society,
        e.location,
        e.start_datetime,
-       e.price,
+       e.ticket_price,
        e.latitude,
        e.longitude,
        t.tag_id,
@@ -55,12 +54,13 @@ module.exports = class {
     );
   }
 
-  getEvent({ id = null }) {
-    if (id == null) {
-      throw "An Event ID MUST be given"
+  getEvent({ event_id = null }) {
+    if (event_id == null) {
+      throw "An Event ID MUST be given";
     }
-    return this.db.getRow(
-      `SELECT
+    return this.db
+      .getRow(
+        `SELECT
       e.event_id,
       e.name,
       e.description,
@@ -68,7 +68,7 @@ module.exports = class {
       e.society,
       e.location,
       e.start_datetime,
-      e.price,
+      e.ticket_price,
       e.latitude,
       e.longitude,
       string_agg(t.tag_name, ';') AS tags
@@ -88,18 +88,21 @@ module.exports = class {
       e.society,
       e.location,
       e.start_datetime,
-      e.price,
+      e.ticket_price,
       e.latitude,
       e.longitude;
-    `, [this.id]
-    )
+    `,
+        [event_id]
+      )
+      .then((row) => {
+        row.tags = row.tags.split(";");
+        return row;
+      });
   }
   allEvents() {
-    if (id == null) {
-      throw "An Event ID MUST be given"
-    }
-    return this.db.getRows(
-      `SELECT
+    return this.db
+      .getRows(
+        `SELECT
       e.event_id,
       e.name,
       e.description,
@@ -107,7 +110,7 @@ module.exports = class {
       e.society,
       e.location,
       e.start_datetime,
-      e.price,
+      e.ticket_price,
       e.latitude,
       e.longitude,
       string_agg(t.tag_name, ';') AS tags
@@ -125,33 +128,50 @@ module.exports = class {
       e.society,
       e.location,
       e.start_datetime,
-      e.price,
+      e.ticket_price,
       e.latitude,
       e.longitude;
-    `, [this.id]
-    )
+    `,
+        []
+      )
+      .then((rows) => {
+        rows.forEach((row) => {
+          row.tags = row.tags.split(";");
+        });
+        return rows;
+      });
   }
 
-  search({ startAt = new Date(), endAt = new Date((new Date()).getFullYear() + 100, 0, 1), society = null, tags = [] }) {
-    this.startAt = startAt
-    this.endAt = endAt
-    this.society = society
-    this.tags = tags
+  search({
+    startAt = new Date(),
+    endAt = new Date(new Date().getFullYear() + 100, 0, 1),
+    society = null,
+    tags = [],
+  }) {
+    this.startAt = startAt;
+    this.endAt = endAt;
+    this.society = society;
+    this.tags = tags;
 
     const eventsMap = new Map();
-    const rows = this.society ?
-      this.searchWithSociety() : this.searchWithoutSociety()
-    rows.forEach((row) => {
-      const { event_id, tag_id, tag_name, ...eventData } = row;
-      const event = eventsMap.get(event_id);
+    return (
+      this.society ? this.searchWithSociety() : this.searchWithoutSociety()
+    ).then((rows) => {
+      console.log("rows", rows);
+      rows.forEach((row) => {
+        const { event_id, tag_id, tag_name, ...eventData } = row;
+        const event = eventsMap.get(event_id);
 
-      if (event) {
-        event.tags.push({ tag_id, tag_name });
-      } else {
-        eventsMap.set(event_id, { ...eventData, tags: [{ tag_id, tag_name }] });
-      }
+        if (event) {
+          event.tags.push({ tag_id, tag_name });
+        } else {
+          eventsMap.set(event_id, {
+            ...eventData,
+            tags: [{ tag_id, tag_name }],
+          });
+        }
+      });
+      return Array.from(eventsMap.values());
     });
-    return Array.from(eventsMap.values())
   }
-
 };

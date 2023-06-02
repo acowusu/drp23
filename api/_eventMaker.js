@@ -10,13 +10,13 @@ module.exports = class {
     society,
     location,
     start_datetime,
-    price,
+    ticket_price,
     latitude,
     longitude,
     tags,
   }) {
     const client = await this.db.getClient();
-
+    let id;
     try {
       await client.query("BEGIN");
 
@@ -40,7 +40,7 @@ module.exports = class {
       );
 
       const insertResult = await client.query(
-        `INSERT INTO events (name, description, thumbnail, society, location, start_datetime, price, latitude, longitude)
+        `INSERT INTO events (name, description, thumbnail, society, location, start_datetime, ticket_price, latitude, longitude)
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING event_id`,
         [
           name,
@@ -49,14 +49,14 @@ module.exports = class {
           society,
           location,
           start_datetime,
-          price,
+          ticket_price,
           latitude,
           longitude,
         ]
       );
 
       const eventId = insertResult.rows[0].event_id;
-
+      id = eventId;
       await Promise.all(
         tagIds.map(async (tagId) => {
           await client.query(
@@ -67,12 +67,33 @@ module.exports = class {
       );
 
       await client.query("COMMIT");
+
       console.log("Event created successfully!");
+      //  add to algolia
+
+      await this.db.addSearchable({
+        objectID: eventId,
+        name,
+        description,
+        thumbnail,
+        society,
+        location,
+        start_datetime,
+        ticket_price,
+        latitude,
+        longitude,
+        timestamp: new Date(start_datetime).valueOf(),
+        _geoloc: {
+          lat: latitude,
+          lon: longitude,
+        },
+      });
     } catch (error) {
       await client.query("ROLLBACK");
       console.error("Error creating event:", error);
     } finally {
       client.release();
     }
+    return id;
   }
 };

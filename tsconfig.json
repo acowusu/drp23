@@ -18,6 +18,7 @@
     },
     "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
   },
+  "files": ["src/shims-vue.d.ts"],
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",

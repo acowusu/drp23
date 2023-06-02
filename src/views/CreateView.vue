@@ -16,11 +16,20 @@
     <n-form-item path="location" label="Location">
       <n-input v-model:value="model.location" />
     </n-form-item>
+
     <n-form-item path="date_time" label="Date Time">
-      <n-input v-model:value="model.date_time" />
+      <n-date-picker
+        v-model:formatted-value="model.date_time"
+        value-format="yyyy-MM-dd HH:mm:ss"
+        type="datetime"
+        clearable
+      />
     </n-form-item>
     <n-form-item path="ticket_price" label="Ticket Price">
       <n-input-number v-model:value="model.ticket_price" />
+    </n-form-item>
+    <n-form-item path="tags" label="Tags">
+      <n-dynamic-tags v-model:value="model.tags" />
     </n-form-item>
     <n-form-item path="latitude" label="Latitude">
       <n-input-number v-model:value="model.latitude" />
@@ -38,7 +47,7 @@
             type="primary"
             @click="handleValidateButtonClick"
           >
-            Validate
+            Create
           </n-button>
         </div>
       </n-col>
@@ -50,6 +59,8 @@
 import {
   NButton,
   NCol,
+  NDatePicker,
+  NDynamicTags,
   NForm,
   NFormItem,
   NInput,
@@ -57,6 +68,20 @@ import {
   NRow,
 } from "naive-ui";
 import { defineComponent } from "vue";
+
+const now = new Date();
+const nowstr =
+  now.getFullYear() +
+  ("00" + (now.getMonth() + 1)).slice(-2) +
+  "-" +
+  ("00" + now.getDate()).slice(-2) +
+  "-" +
+  " " +
+  ("00" + now.getHours()).slice(-2) +
+  ":" +
+  ("00" + now.getMinutes()).slice(-2) +
+  ":" +
+  ("00" + now.getSeconds()).slice(-2);
 
 interface EventPayload {
   name: string;
@@ -81,6 +106,8 @@ export default defineComponent({
     NFormItem,
     NInput,
     NInputNumber,
+    NDatePicker,
+    NDynamicTags,
   },
   data() {
     return {
@@ -90,7 +117,7 @@ export default defineComponent({
         image_url: "",
         organizer: "",
         location: "",
-        date_time: "",
+        date_time: "2023-07-22 12:00:00",
         ticket_price: 0,
         latitude: 0,
         longitude: 0,
@@ -101,8 +128,23 @@ export default defineComponent({
   },
 
   methods: {
-    handleValidateButtonClick() {
-      console.log(this.$refs.formRef);
+    async handleValidateButtonClick() {
+      const options = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(this.model),
+      };
+
+      await fetch("/api/create", options)
+        .then((response) => response.json())
+        .then(({ event_id }) => {
+          console.log({ event_id });
+          this.$router.push({
+            name: "event",
+            params: { event_id },
+          });
+        })
+        .catch((err) => console.error(err));
     },
   },
 });

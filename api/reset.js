@@ -1,4 +1,4 @@
-const Database = require("./db");
+const Database = require("./_db");
 const db = new Database();
 
 module.exports = async (req, res) => {
