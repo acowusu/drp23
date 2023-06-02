@@ -26,4 +26,3 @@ CREATE TABLE eventTags (
     FOREIGN KEY (tag_id) REFERENCES tags (tag_id)
 );
 COMMIT;
-

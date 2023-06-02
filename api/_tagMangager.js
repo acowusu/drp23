@@ -6,7 +6,7 @@ module.exports = class {
   getAll() {
     return this.db.getRows(
       /*sql */ `
-      SELECT 
+      SELECT
        t.tag_id,
        t.tag_name
       FROM tags t

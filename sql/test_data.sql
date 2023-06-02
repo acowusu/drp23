@@ -40,4 +40,3 @@ INSERT INTO eventTags (event_id, tag_id)
     ('ffffffff-ffff-ffff-ffff-fffffffffff4', 'ffffffff-ffff-ffff-ffff-fffffffffff4'),
     ('ffffffff-ffff-ffff-ffff-fffffffffff5', 'ffffffff-ffff-ffff-ffff-fffffffffff5');
 COMMIT;
-
