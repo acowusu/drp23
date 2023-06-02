@@ -10,7 +10,11 @@
     "latitude": 40.7829,
     "longitude": -73.9654,
     "id": 1,
-    "tags": ["Open to all", "Free Cake", "Alcohol free"],
+    "tags": [
+      "Open to all",
+      "Free Cake",
+      "Alcohol free"
+    ],
     "timestamp": 1686853800000,
     "_geoloc": {
       "lat": 40.7829,
@@ -29,7 +33,10 @@
     "latitude": 40.7128,
     "longitude": -74.006,
     "id": 2,
-    "tags": ["Free Cake", "Alcohol free"],
+    "tags": [
+      "Free Cake",
+      "Alcohol free"
+    ],
     "timestamp": 1688979600000,
     "_geoloc": {
       "lat": 40.7829,
@@ -48,7 +55,10 @@
     "latitude": 40.7406,
     "longitude": -73.9903,
     "id": 3,
-    "tags": ["Open to all", "Alcohol free"],
+    "tags": [
+      "Open to all",
+      "Alcohol free"
+    ],
     "timestamp": 1688130000000,
     "_geoloc": {
       "lat": 40.7829,
@@ -67,7 +77,11 @@
     "latitude": 40.7589,
     "longitude": -73.9851,
     "id": 4,
-    "tags": ["Open to all", "Free Cake", "Alcohol free"],
+    "tags": [
+      "Open to all",
+      "Free Cake",
+      "Alcohol free"
+    ],
     "timestamp": 1690023600000,
     "_geoloc": {
       "lat": 40.782,
@@ -86,7 +100,9 @@
     "latitude": 40.7282,
     "longitude": -74.0776,
     "id": 5,
-    "tags": ["Open to all"],
+    "tags": [
+      "Open to all"
+    ],
     "timestamp": 1691222400000,
     "_geoloc": {
       "lat": 40.7823,
