@@ -1,11 +1,9 @@
 module.exports = class {
-  constructor({ db }) {
-    this.db = db;
-  }
+  constructor({db}) { this.db = db; }
 
   searchWithSociety() {
     return this.db.getRows(
-      /*sql */ `
+        /*sql */ `
       SELECT e.event_id,
        e.name,
        e.description,
@@ -25,13 +23,12 @@ module.exports = class {
         AND e.society = $3
         AND t.tag_name = ANY($4::varchar[])
 `,
-      [this.startAt, this.endAt, this.society, this.tags]
-    );
+        [ this.startAt, this.endAt, this.society, this.tags ]);
   }
   searchWithoutSociety() {
     console.log("searching");
     return this.db.getRows(
-      /*sql */ `
+        /*sql */ `
       SELECT e.event_id,
        e.name,
        e.description,
@@ -50,17 +47,15 @@ module.exports = class {
       WHERE e.start_datetime BETWEEN $1 AND $2
         AND t.tag_name = ANY($4::varchar[])
 `,
-      [this.startAt, this.endAt, this.tags]
-    );
+        [ this.startAt, this.endAt, this.tags ]);
   }
 
-  getEvent({ event_id = null }) {
+  getEvent({event_id = null}) {
     if (event_id == null) {
       throw "An Event ID MUST be given";
     }
     return this.db
-      .getRow(
-        `SELECT
+        .getRow(`SELECT
       e.event_id,
       e.name,
       e.description,
@@ -92,17 +87,15 @@ module.exports = class {
       e.latitude,
       e.longitude;
     `,
-        [event_id]
-      )
-      .then((row) => {
-        row.tags = row.tags.split(";");
-        return row;
-      });
+                [ event_id ])
+        .then((row) => {
+          row.tags = row.tags.split(";");
+          return row;
+        });
   }
   allEvents() {
     return this.db
-      .getRows(
-        `SELECT
+        .getRows(`SELECT
       e.event_id,
       e.name,
       e.description,
@@ -132,14 +125,11 @@ module.exports = class {
       e.latitude,
       e.longitude;
     `,
-        []
-      )
-      .then((rows) => {
-        rows.forEach((row) => {
-          row.tags = row.tags.split(";");
+                 [])
+        .then((rows) => {
+          rows.forEach((row) => { row.tags = row.tags.split(";"); });
+          return rows;
         });
-        return rows;
-      });
   }
 
   search({
@@ -154,24 +144,24 @@ module.exports = class {
     this.tags = tags;
 
     const eventsMap = new Map();
-    return (
-      this.society ? this.searchWithSociety() : this.searchWithoutSociety()
-    ).then((rows) => {
-      console.log("rows", rows);
-      rows.forEach((row) => {
-        const { event_id, tag_id, tag_name, ...eventData } = row;
-        const event = eventsMap.get(event_id);
+    return (this.society ? this.searchWithSociety()
+                         : this.searchWithoutSociety())
+        .then((rows) => {
+          console.log("rows", rows);
+          rows.forEach((row) => {
+            const {event_id, tag_id, tag_name, ...eventData} = row;
+            const event = eventsMap.get(event_id);
 
-        if (event) {
-          event.tags.push({ tag_id, tag_name });
-        } else {
-          eventsMap.set(event_id, {
-            ...eventData,
-            tags: [{ tag_id, tag_name }],
+            if (event) {
+              event.tags.push({tag_id, tag_name});
+            } else {
+              eventsMap.set(event_id, {
+                ...eventData,
+                tags : [ {tag_id, tag_name} ],
+              });
+            }
           });
-        }
-      });
-      return Array.from(eventsMap.values());
-    });
+          return Array.from(eventsMap.values());
+        });
   }
 };

@@ -1,17 +1,14 @@
 module.exports = class {
-  constructor({ db }) {
-    this.db = db;
-  }
+  constructor({db}) { this.db = db; }
 
   getAll() {
     return this.db.getRows(
-      /*sql */ `
+        /*sql */ `
       SELECT 
        t.tag_id,
        t.tag_name
       FROM tags t
 `,
-      []
-    );
+        []);
   }
 };

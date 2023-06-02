@@ -1,7 +1,5 @@
 module.exports = class {
-  constructor({ db }) {
-    this.db = db;
-  }
+  constructor({db}) { this.db = db; }
 
   async create({
     name,
@@ -20,51 +18,42 @@ module.exports = class {
     try {
       await client.query("BEGIN");
 
-      const tagIds = await Promise.all(
-        tags.map(async (tagName) => {
-          const { rows } = await client.query(
-            "SELECT tag_id FROM tags WHERE tag_name = $1",
-            [tagName]
-          );
+      const tagIds = await Promise.all(tags.map(async (tagName) => {
+        const {rows} = await client.query(
+            "SELECT tag_id FROM tags WHERE tag_name = $1", [ tagName ]);
 
-          if (rows.length > 0) {
-            return rows[0].tag_id;
-          } else {
-            const insertResult = await client.query(
+        if (rows.length > 0) {
+          return rows[0].tag_id;
+        } else {
+          const insertResult = await client.query(
               "INSERT INTO tags (tag_name) VALUES ($1) RETURNING tag_id",
-              [tagName]
-            );
-            return insertResult.rows[0].tag_id;
-          }
-        })
-      );
+              [ tagName ]);
+          return insertResult.rows[0].tag_id;
+        }
+      }));
 
       const insertResult = await client.query(
-        `INSERT INTO events (name, description, thumbnail, society, location, start_datetime, ticket_price, latitude, longitude)
+          `INSERT INTO events (name, description, thumbnail, society, location, start_datetime, ticket_price, latitude, longitude)
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING event_id`,
-        [
-          name,
-          description,
-          thumbnail,
-          society,
-          location,
-          start_datetime,
-          ticket_price,
-          latitude,
-          longitude,
-        ]
-      );
+          [
+            name,
+            description,
+            thumbnail,
+            society,
+            location,
+            start_datetime,
+            ticket_price,
+            latitude,
+            longitude,
+          ]);
 
       const eventId = insertResult.rows[0].event_id;
       id = eventId;
-      await Promise.all(
-        tagIds.map(async (tagId) => {
-          await client.query(
+      await Promise.all(tagIds.map(async (tagId) => {
+        await client.query(
             "INSERT INTO eventTags (event_id, tag_id) VALUES ($1, $2)",
-            [eventId, tagId]
-          );
-        })
-      );
+            [ eventId, tagId ]);
+      }));
 
       await client.query("COMMIT");
 
@@ -72,7 +61,7 @@ module.exports = class {
       //  add to algolia
 
       await this.db.addSearchable({
-        objectID: eventId,
+        objectID : eventId,
         name,
         description,
         thumbnail,
@@ -82,10 +71,10 @@ module.exports = class {
         ticket_price,
         latitude,
         longitude,
-        timestamp: new Date(start_datetime).valueOf(),
-        _geoloc: {
-          lat: latitude,
-          lon: longitude,
+        timestamp : new Date(start_datetime).valueOf(),
+        _geoloc : {
+          lat : latitude,
+          lon : longitude,
         },
       });
     } catch (error) {

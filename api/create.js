@@ -5,7 +5,7 @@ const EventMaker = require("./_eventMaker");
 
 module.exports = async (req, res) => {
   const {
-    body: {
+    body : {
       name,
       description,
       thumbnail,
@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
       tags,
     },
   } = req;
-  const Maker = new EventMaker({ db });
+  const Maker = new EventMaker({db});
 
   try {
     const event_id = await Maker.create({
@@ -34,12 +34,12 @@ module.exports = async (req, res) => {
       tags,
     });
     res.json({
-      success: true,
+      success : true,
       event_id,
     });
   } catch {
     res.status(400).json({
-      success: false,
+      success : false,
     });
   }
 };

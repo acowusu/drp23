@@ -5,11 +5,11 @@ const QueryBuilder = require("./_eventSearcher");
 
 module.exports = async (req, res) => {
   const {
-    body: { startAt, endAt, society, tags },
+    body : {startAt, endAt, society, tags},
   } = req;
-  const query = new QueryBuilder({ db });
+  const query = new QueryBuilder({db});
 
   res.json({
-    results: query.search({ startAt, endAt, society, tags }),
+    results : query.search({startAt, endAt, society, tags}),
   });
 };

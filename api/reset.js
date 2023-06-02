@@ -4,18 +4,18 @@ const db = new Database();
 module.exports = async (req, res) => {
   console.log(req.body);
   const {
-    body: { force },
+    body : {force},
   } = req;
 
   try {
     await db.reset(force);
     res.json({
-      success: true,
+      success : true,
     });
   } catch (e) {
     console.log(e);
     res.status(400).json({
-      success: false,
+      success : false,
       e,
     });
   }
