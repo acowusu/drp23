@@ -91,8 +91,8 @@ module.exports = class db {
   addSearchable(data) {
     return index.saveObject(data);
   }
-  reset(force) {
-    if (process.env.VERCEL_ENV != "development" && !force) {
+  reset() {
+    if (process.env.VERCEL_ENV != "development") {
       console.error("UNABLE TO RESET PRODUCTION DEPLOYMENT");
       throw "UNABLE TO RESET PRODUCTION DEPLOYMENT";
     }

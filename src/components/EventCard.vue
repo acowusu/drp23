@@ -71,6 +71,9 @@ export default defineComponent({
       return new Date(date).toLocaleString();
     },
   },
+  mounted() {
+    console.log(this.data);
+  },
 });
 </script>
 

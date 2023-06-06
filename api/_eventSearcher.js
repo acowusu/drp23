@@ -9,10 +9,10 @@ module.exports = class {
       SELECT e.event_id,
        e.name,
        e.description,
-       e.thumbnail,
+       e.image_url,
        e.society,
        e.location,
-       e.start_datetime,
+       e.date_time,
        e.ticket_price,
        e.latitude,
        e.longitude,
@@ -21,7 +21,7 @@ module.exports = class {
       FROM events e
       JOIN eventTags et ON e.event_id = et.event_id
       JOIN tags t ON et.tag_id = t.tag_id
-      WHERE e.start_datetime BETWEEN $1 AND $2
+      WHERE e.date_time BETWEEN $1 AND $2
         AND e.society = $3
         AND t.tag_name = ANY($4::varchar[])
 `,
@@ -35,10 +35,10 @@ module.exports = class {
       SELECT e.event_id,
        e.name,
        e.description,
-       e.thumbnail,
+       e.image_url,
        e.society,
        e.location,
-       e.start_datetime,
+       e.date_time,
        e.ticket_price,
        e.latitude,
        e.longitude,
@@ -47,7 +47,7 @@ module.exports = class {
       FROM events e
       JOIN eventTags et ON e.event_id = et.event_id
       JOIN tags t ON et.tag_id = t.tag_id
-      WHERE e.start_datetime BETWEEN $1 AND $2
+      WHERE e.date_time BETWEEN $1 AND $2
         AND t.tag_name = ANY($4::varchar[])
 `,
       [this.startAt, this.endAt, this.tags]
@@ -64,10 +64,10 @@ module.exports = class {
       e.event_id,
       e.name,
       e.description,
-      e.thumbnail,
+      e.image_url,
       e.society,
       e.location,
-      e.start_datetime,
+      e.date_time,
       e.ticket_price,
       e.latitude,
       e.longitude,
@@ -84,10 +84,10 @@ module.exports = class {
       e.event_id,
       e.name,
       e.description,
-      e.thumbnail,
+      e.image_url,
       e.society,
       e.location,
-      e.start_datetime,
+      e.date_time,
       e.ticket_price,
       e.latitude,
       e.longitude;
@@ -106,10 +106,10 @@ module.exports = class {
       e.event_id,
       e.name,
       e.description,
-      e.thumbnail,
+      e.image_url,
       e.society,
       e.location,
-      e.start_datetime,
+      e.date_time,
       e.ticket_price,
       e.latitude,
       e.longitude,
@@ -124,10 +124,10 @@ module.exports = class {
       e.event_id,
       e.name,
       e.description,
-      e.thumbnail,
+      e.image_url,
       e.society,
       e.location,
-      e.start_datetime,
+      e.date_time,
       e.ticket_price,
       e.latitude,
       e.longitude;
