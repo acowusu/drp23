@@ -14,18 +14,15 @@
     <n-tag rounded :bordered="false" type="error" v-else>
       £{{ data.ticket_price }}</n-tag
     >
-    <n-button
-      secondary
-      dashed
-      round
-      type="warning"
-      @click="starEvent"
-      v-if="!starred"
-    >
-      Star
+    <n-button text style="font-size: 32px" @click="starEvent" v-if="!starred">
+      <n-icon>
+        <font-awesome-icon icon="fa-regular fa-star" />
+      </n-icon>
     </n-button>
-    <n-button secondary round type="warning" @click="starEvent" v-else
-      >Starred
+    <n-button text style="font-size: 32px" @click="starEvent" v-else
+      ><n-icon>
+        <font-awesome-icon icon="fa-solid fa-star" />
+      </n-icon>
     </n-button>
     <n-divider />
     <n-ellipsis expand-trigger="click" line-clamp="2" :tooltip="false">
@@ -47,8 +44,17 @@
 </template>
 
 <script lang="ts">
-import { NCard, NDivider, NEllipsis, NSpace, NTag, NButton } from "naive-ui";
+import {
+  NCard,
+  NDivider,
+  NEllipsis,
+  NSpace,
+  NTag,
+  NButton,
+  NIcon,
+} from "naive-ui";
 import { defineComponent } from "vue";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 interface EventPayload {
   name: string;
   description: string;
@@ -73,6 +79,8 @@ export default defineComponent({
     NDivider,
     NEllipsis,
     NButton,
+    NIcon,
+    FontAwesomeIcon,
   },
   props: {
     data: {
