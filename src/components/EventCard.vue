@@ -14,6 +14,19 @@
     <n-tag rounded :bordered="false" type="error" v-else>
       £{{ data.ticket_price }}</n-tag
     >
+    <n-button
+      secondary
+      dashed
+      round
+      type="warning"
+      @click="starEvent"
+      v-if="!starred"
+    >
+      Star
+    </n-button>
+    <n-button secondary round type="warning" @click="starEvent" v-else
+      >Starred
+    </n-button>
     <n-divider />
     <n-ellipsis expand-trigger="click" line-clamp="2" :tooltip="false">
       {{ data.description }}
@@ -34,7 +47,7 @@
 </template>
 
 <script lang="ts">
-import { NCard, NDivider, NEllipsis, NSpace, NTag } from "naive-ui";
+import { NCard, NDivider, NEllipsis, NSpace, NTag, NButton } from "naive-ui";
 import { defineComponent } from "vue";
 interface EventPayload {
   name: string;
@@ -46,7 +59,7 @@ interface EventPayload {
   ticket_price: number;
   latitude: number;
   longitude: number;
-  event_id?: string;
+  event_id: string;
   objectID?: string;
   tags: string[];
 }
@@ -59,6 +72,7 @@ export default defineComponent({
     NSpace,
     NDivider,
     NEllipsis,
+    NButton,
   },
   props: {
     data: {
@@ -66,13 +80,24 @@ export default defineComponent({
       required: true,
     },
   },
+  data: function () {
+    return {
+      starred: localStorage.getItem(this.data.event_id) == "true",
+    };
+  },
   methods: {
     prettyPrint(date: string) {
       return new Date(date).toLocaleString();
     },
-  },
-  mounted() {
-    console.log(this.data);
+    starEvent() {
+      if (this.starred) {
+        localStorage.removeItem(this.data.event_id);
+        this.starred = false;
+      } else {
+        localStorage.setItem(this.data.event_id, "true");
+        this.starred = true;
+      }
+    },
   },
 });
 </script>
