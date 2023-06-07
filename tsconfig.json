@@ -12,12 +12,13 @@
     "useDefineForClassFields": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "types": ["webpack-env"],
+    "types": ["webpack-env", "naive-ui/volar"],
     "paths": {
       "@/*": ["src/*"]
     },
     "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
   },
+  "files": ["src/shims-vue.d.ts"],
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
