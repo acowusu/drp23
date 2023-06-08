@@ -14,12 +14,12 @@
     <n-tag rounded :bordered="false" type="error" v-else>
       £{{ data.ticket_price }}</n-tag
     >
-    <n-button text style="font-size: 32px" @click="starEvent" v-if="!starred">
+    <n-button text class="event-star" @click="starEvent" v-if="!starred">
       <n-icon>
         <font-awesome-icon icon="fa-regular fa-star" />
       </n-icon>
     </n-button>
-    <n-button text style="font-size: 32px" @click="starEvent" v-else
+    <n-button text class="event-star" @click="starEvent" v-else
       ><n-icon>
         <font-awesome-icon icon="fa-solid fa-star" />
       </n-icon>
@@ -44,17 +44,17 @@
 </template>
 
 <script lang="ts">
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import {
+  NButton,
   NCard,
   NDivider,
   NEllipsis,
+  NIcon,
   NSpace,
   NTag,
-  NButton,
-  NIcon,
 } from "naive-ui";
 import { defineComponent } from "vue";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 interface EventPayload {
   name: string;
   description: string;
@@ -129,5 +129,15 @@ li {
 }
 a {
   color: #42b983;
+}
+.event-star {
+  font-size: 32px;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+.fa-star {
+  box-shadow: rgb(255 255 255 / 27%) 0px 0px 20px 12px;
+  background: rgb(255 255 255 / 27%);
 }
 </style>
