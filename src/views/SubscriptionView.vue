@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-
     <h1>Subscriptions</h1>
     <p>Subscribe to societies to get updates on their events</p>
     <div class="form">
