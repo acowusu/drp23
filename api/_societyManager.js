@@ -7,7 +7,11 @@ module.exports = class {
     return this.db.getRows(
       /*sql */ `
       SELECT 
-       s.name
+       s.name,
+        s.type,
+        s.description,
+        s.metadata
+
       FROM society s
 `,
       []

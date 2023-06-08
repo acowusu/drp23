@@ -111,6 +111,7 @@ export default defineComponent({
   },
   data() {
     return {
+      societies: [] as { label: string; value: string }[],
       model: {
         name: "",
         description: "",

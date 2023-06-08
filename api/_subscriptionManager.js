@@ -73,12 +73,15 @@ module.exports = class {
       client.release();
     }
   }
-  async getAll(email) {
+  async getAll({ email }) {
     return this.db.getRows(
       /*sql */ `
       SELECT
         s.society_id, 
-        s.name
+        s.name,
+        s.type,
+        s.description,
+        s.metadata
       FROM society s
       JOIN subscription ss ON ss.society_id = s.society_id
       JOIN users u ON u.user_id = ss.user_id
