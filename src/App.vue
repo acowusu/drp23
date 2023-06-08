@@ -15,7 +15,8 @@ export default defineComponent({
       <router-link to="/subscriptions">Subscriptions</router-link> |
       <router-link to="/today">Today's events</router-link> |
       <router-link to="/">Browse Events</router-link> |
-      <router-link to="/create">Create Event</router-link>
+      <router-link to="/create">Create Event</router-link> |
+      <router-link to="/myevents">My Events</router-link>
     </nav>
     <router-view />
   </n-message-provider>

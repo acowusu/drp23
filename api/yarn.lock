@@ -129,6 +129,11 @@
   "resolved" "https://registry.npmjs.org/@babel/parser/-/parser-7.22.4.tgz"
   "version" "7.22.4"
 
+"@babel/parser@^7.20.15", "@babel/parser@^7.21.3":
+  version "7.22.4"
+  resolved "https://registry.npmjs.org/@babel/parser/-/parser-7.22.4.tgz"
+  integrity sha512-VLLsx06XkEYqBtE5YGPwfSGwfrjnyPP5oiGty3S8pQLFDFLaS8VwWSIxkTXpcvr5zeYLE6+MBNl2npl/YnfofA==
+
 "@babel/runtime@^7.0.0":
   "integrity" "sha512-XsDuspWKLUsxwCp6r7EhsExHtYfbe5oAGQ19kqngTdCPUoPQzOPdUbD/pB9PJiwb2ptYKQDjSJT3R6dC+EPqfQ=="
   "resolved" "https://registry.npmjs.org/@babel/runtime/-/runtime-7.22.3.tgz"
@@ -140,6 +145,11 @@
   "integrity" "sha512-eF2rxCRulEKXHTRiDrDy6erMYWqNw4LPdQ8UQA4huuxaQsVeRPFl2oM8oDGxMFhJUWZf9McpLtJasDDZb/Bpeg=="
   "resolved" "https://registry.npmjs.org/@jridgewell/sourcemap-codec/-/sourcemap-codec-1.4.15.tgz"
   "version" "1.4.15"
+
+"@jridgewell/sourcemap-codec@^1.4.13":
+  version "1.4.15"
+  resolved "https://registry.npmjs.org/@jridgewell/sourcemap-codec/-/sourcemap-codec-1.4.15.tgz"
+  integrity sha512-eF2rxCRulEKXHTRiDrDy6erMYWqNw4LPdQ8UQA4huuxaQsVeRPFl2oM8oDGxMFhJUWZf9McpLtJasDDZb/Bpeg==
 
 "@types/dom-speech-recognition@^0.0.1":
   "integrity" "sha512-udCxb8DvjcDKfk1WTBzDsxFbLgYxmQGKrE/ricoMqHRNjSlSUCcamVTA5lIQqzY10mY5qCY0QDwBfFEwhfoDPw=="

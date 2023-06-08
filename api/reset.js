@@ -1,15 +1,9 @@
 const Database = require("./_db");
 const db = new Database();
-const userManager = require("./_userManager");
 
 module.exports = async (req, res) => {
-  console.log(req.body);
-  const {
-    body: { force },
-  } = req;
-
   try {
-    await db.reset(force);
+    await db.reset();
 
     res.json({
       success: true,
