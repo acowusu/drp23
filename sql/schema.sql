@@ -15,12 +15,12 @@ CREATE TABLE events (
     event_id  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name VARCHAR(255) NOT NULL,
     description TEXT,
-    thumbnail VARCHAR(255),
+    image_url VARCHAR(2048),
     society VARCHAR(255),
     location VARCHAR(255),
     latitude NUMERIC(9, 6),
     longitude NUMERIC(9, 6),
-    start_datetime TIMESTAMP,
+    date_time TIMESTAMP,
     ticket_price NUMERIC(10, 2)
 );
 

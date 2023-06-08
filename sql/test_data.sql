@@ -25,7 +25,7 @@ INSERT INTO tags (tag_id, tag_name) VALUES
     ('ffffffff-ffff-ffff-ffff-ffffffffff17' ,'Sports');
 
 -- Inserting data into the events table
-INSERT INTO events (event_id, name, description, thumbnail, society, location, start_datetime, ticket_price, latitude, longitude) VALUES
+INSERT INTO events (event_id, name, description, image_url, society, location, date_time, ticket_price, latitude, longitude) VALUES
     ( 'ffffffff-ffff-ffff-ffff-fffffffffff1' , 'Concert in the Park', 'Join us for a live music concert in the park', 'https://picsum.photos/seed/concert/1920/1080', 'Music Society', 'Central Park', '2023-06-15 19:30:00', 25.99, 40.7829, -73.9654),
     ( 'ffffffff-ffff-ffff-ffff-fffffffffff2' , 'Football Tournament', 'Participate in the annual football tournament', 'https://picsum.photos/seed/football/1920/1080', 'Sports Club', 'City Stadium', '2023-07-10 10:00:00', 10.00, 40.7128, -74.0060),
     ( 'ffffffff-ffff-ffff-ffff-fffffffffff3' , 'Art Exhibition', 'Explore a collection of contemporary art', 'https://picsum.photos/seed/art/1920/1080', 'Art Association', 'Gallery XYZ', '2023-06-30 14:00:00', 5.99, 40.7406, -73.9903),

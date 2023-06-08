@@ -6,10 +6,10 @@ module.exports = class {
   async create({
     name,
     description,
-    thumbnail,
+    image_url,
     society,
     location,
-    start_datetime,
+    date_time,
     ticket_price,
     latitude,
     longitude,
@@ -40,15 +40,15 @@ module.exports = class {
       );
 
       const insertResult = await client.query(
-        `INSERT INTO events (name, description, thumbnail, society, location, start_datetime, ticket_price, latitude, longitude)
+        `INSERT INTO events (name, description, image_url, society, location, date_time, ticket_price, latitude, longitude)
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING event_id`,
         [
           name,
           description,
-          thumbnail,
+          image_url,
           society,
           location,
-          start_datetime,
+          date_time,
           ticket_price,
           latitude,
           longitude,
@@ -75,14 +75,14 @@ module.exports = class {
         objectID: eventId,
         name,
         description,
-        thumbnail,
+        image_url,
         society,
         location,
-        start_datetime,
+        date_time,
         ticket_price,
         latitude,
         longitude,
-        timestamp: new Date(start_datetime).valueOf(),
+        timestamp: new Date(date_time).valueOf(),
         _geoloc: {
           lat: latitude,
           lon: longitude,
