@@ -3,7 +3,7 @@
     <template #cover>
       <img :src="data.image_url" />
     </template>
-    <template #header-extra>
+    <template #header-extra v-if="society_id != ''">
       <router-link :to="{ path: `/society/${society_id}` }">
         {{ data.society }}
       </router-link></template
@@ -97,6 +97,9 @@ export default defineComponent({
       starred: localStorage.getItem(this.data.event_id) == "starred_drp18",
       society_id: "",
     };
+  },
+  async mounted() {
+    await this.getSocietyID();
   },
   methods: {
     prettyPrint(date: string) {

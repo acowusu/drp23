@@ -23,7 +23,7 @@ export default defineComponent({
       name: "",
       type: "",
       desc: "",
-      links: new Map([]),
+      links: new Map<string, string>([]),
     };
   },
   async mounted() {
@@ -44,7 +44,9 @@ export default defineComponent({
     this.name = society.name;
     this.type = society.type;
     this.desc = society.description;
-    this.links = new Map(Object.entries(society.metadata));
+    if (society.metadata) {
+      this.links = new Map(Object.entries(society.metadata));
+    }
   },
 });
 </script>
