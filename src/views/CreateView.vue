@@ -3,13 +3,12 @@
     <n-form-item path="name" label="Name">
       <n-input v-model:value="model.name" />
     </n-form-item>
-
     <n-form-item path="description" label="Description">
       <n-input v-model:value="model.description" />
     </n-form-item>
-    <n-form-item path="image_url" label="Image Url">
-      <n-input v-model:value="model.image_url" />
-    </n-form-item>
+    <n-upload @before-upload="beforeUpload" @on-success="onUploadSuccess">
+      <n-button>Upload Image</n-button>
+    </n-upload>
     <n-form-item path="organizer" label="Organizer">
       <n-input v-model:value="model.organizer" />
     </n-form-item>
@@ -29,7 +28,31 @@
       <n-input-number v-model:value="model.ticket_price" />
     </n-form-item>
     <n-form-item path="tags" label="Tags">
-      <n-dynamic-tags v-model:value="model.tags" />
+      <n-checkbox-group>
+        <n-grid :y-gap="10" :cols="1">
+          <n-gi>
+            <n-checkbox
+              value="No membership required"
+              label="No membership required"
+            />
+          </n-gi>
+          <n-gi>
+            <n-checkbox value="Free" label="Free" />
+          </n-gi>
+          <n-gi>
+            <n-checkbox value="Free food" label="Free food" />
+          </n-gi>
+          <n-gi>
+            <n-checkbox value="Free snacks" label="Free snacks" />
+          </n-gi>
+          <n-gi>
+            <n-checkbox value="Free drinks" label="Free drinks" />
+          </n-gi>
+          <n-gi>
+            <n-checkbox value="Alcohol-free" label="Alcohol-free" />
+          </n-gi>
+        </n-grid>
+      </n-checkbox-group>
     </n-form-item>
     <n-form-item path="latitude" label="Latitude">
       <n-input-number v-model:value="model.latitude" />
@@ -60,14 +83,21 @@ import {
   NButton,
   NCol,
   NDatePicker,
-  NDynamicTags,
   NForm,
   NFormItem,
   NInput,
   NInputNumber,
   NRow,
+  NCheckbox,
+  NCheckboxGroup,
+  NGrid,
+  NGi,
+  NUpload,
+  useMessage,
 } from "naive-ui";
 import { defineComponent } from "vue";
+import firebase from "firebase/compat/app";
+import "firebase/compat/storage";
 
 const now = new Date();
 const nowstr =
@@ -107,7 +137,11 @@ export default defineComponent({
     NInput,
     NInputNumber,
     NDatePicker,
-    NDynamicTags,
+    NCheckbox,
+    NCheckboxGroup,
+    NGrid,
+    NGi,
+    NUpload,
   },
   data() {
     return {
@@ -125,9 +159,9 @@ export default defineComponent({
         id: -1,
         tags: [],
       },
+      message: useMessage(),
     };
   },
-
   methods: {
     async handleValidateButtonClick() {
       const options = {
@@ -147,6 +181,30 @@ export default defineComponent({
         })
         .catch((err) => console.error(err));
     },
+    beforeUpload(data: any) {
+      const type = data.file.file?.type;
+      if (
+        type !== "image/png" &&
+        type !== "image/jpeg" &&
+        type !== "image/jpg"
+      ) {
+        this.message.error(
+          "Only upload picture files in jpeg, jpg or png format, please re-upload."
+        );
+        return false;
+      }
+      return true;
+    },
+    onUploadSuccess(data: any) {
+      const random = Math.random().toString(36).substring(2);
+      const storageRef = firebase.storage().ref(random);
+      storageRef.put(data).then(() => {
+        storageRef.getDownloadURL().then((url: string) => {
+          this.model.image_url = url;
+          console.log(this.model.image_url);
+        });
+      });
+    },
   },
 });
 </script>
@@ -155,5 +213,8 @@ export default defineComponent({
 .form {
   width: calc(min(100vw, 400px) - 40px);
   margin: auto;
+}
+.n-grid {
+  text-align: left;
 }
 </style>
