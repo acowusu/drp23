@@ -11,7 +11,7 @@
       <n-input v-model:value="model.image_url" />
     </n-form-item>
     <n-form-item path="organizer" label="Organizer">
-      <n-input v-model:value="model.organizer" />
+      <n-input v-model:value="society" :disabled="true" />
     </n-form-item>
     <n-form-item path="location" label="Location">
       <n-input v-model:value="model.location" />
@@ -124,9 +124,12 @@ export default defineComponent({
         id: -1,
         tags: [],
       },
+      society: "",
     };
   },
-
+  mounted() {
+    this.society = String(this.$route.query.society);
+  },
   methods: {
     async handleValidateButtonClick() {
       const options = {

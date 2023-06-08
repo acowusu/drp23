@@ -39,6 +39,11 @@ const routes: Array<RouteRecordRaw> = [
     name: "myevents",
     component: () => import("../views/MyEventsView.vue"),
   },
+  {
+    path: "/societyhomepage",
+    name: "societyhomepage",
+    component: () => import("../views/SocietyHomepage.vue"),
+  },
 ];
 
 const router = createRouter({
