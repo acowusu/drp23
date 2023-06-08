@@ -95,7 +95,7 @@ module.exports = class {
     } finally {
       client.release();
     }
-    this.subscriptionManager.notify({
+    await this.subscriptionManager.notify({
       name,
       description,
       image_url,

@@ -4,7 +4,7 @@ const postmark = require("postmark");
 const config = {
   key: process.env.postmark_api,
 };
-module.exports = class db {
+module.exports = class Email {
   constructor() {
     this.client = new postmark.ServerClient(config.key);
   }
@@ -14,6 +14,9 @@ module.exports = class db {
   async send({ content, subject, to }) {
     if (typeof to === "string") {
       to = [to];
+    }
+    if (to.length === 0) {
+      return;
     }
     await this.client.sendEmailBatch(
       to.map((To) => {

@@ -1,6 +1,9 @@
 const Database = require("./_db");
 const db = new Database();
-const subscriptionManager = require("./_subscriptionManager");
+const SubscriptionManager = require("./_subscriptionManager");
+const Email = require("./_email");
+const email = new Email();
+const subscriptionManager = new SubscriptionManager({ db, email });
 const EventMaker = require("./_eventMaker");
 const Maker = new EventMaker({ db, subscriptionManager });
 
@@ -37,7 +40,8 @@ module.exports = async (req, res) => {
       success: true,
       event_id,
     });
-  } catch {
+  } catch (e) {
+    console.log(e);
     res.status(400).json({
       success: false,
     });

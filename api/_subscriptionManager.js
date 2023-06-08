@@ -90,15 +90,16 @@ module.exports = class {
     );
   }
   async notify(event) {
-    const to = await this.db.getRows(
+    const result = await this.db.getRows(
       /*sql */ `
-      SELECT u.email,
+      SELECT u.email
       FROM subscription ss
       JOIN users u ON u.user_id = ss.user_id
       JOIN society s  ON s.society_id = ss.society_id
-      WHERE s.name $1`,
+      WHERE s.name = $1`,
       [event.society]
     );
+    const to = result.map((row) => row.email);
     const subject = `New Event for ${event.society}`;
     const content = `A new event has been created for ${event.society}!
     <h1>${event.name}</h1>
