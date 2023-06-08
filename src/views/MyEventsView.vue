@@ -18,7 +18,7 @@ export default defineComponent({
   async mounted() {
     let reqs = [];
     for (let i = 0; i < localStorage.length; i++) {
-      const event_id = localStorage.key(i);
+      const event_id = localStorage.key(i) ?? "null";
       console.log(event_id);
       const options = {
         method: "POST",
@@ -27,11 +27,13 @@ export default defineComponent({
       };
       console.log(options);
 
-      reqs.push(
-        fetch("/api/event", options)
-          .then((response) => response.json())
-          .then((response) => this.items.push(response))
-      );
+      if (localStorage.getItem(event_id) == "starred_drp18") {
+        reqs.push(
+          fetch("/api/event", options)
+            .then((response) => response.json())
+            .then((response) => this.items.push(response))
+        );
+      }
     }
     await Promise.all(reqs);
     console.log(localStorage.length);

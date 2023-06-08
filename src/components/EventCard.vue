@@ -90,7 +90,7 @@ export default defineComponent({
   },
   data: function () {
     return {
-      starred: localStorage.getItem(this.data.event_id) == "true",
+      starred: localStorage.getItem(this.data.event_id) == "starred_drp18",
     };
   },
   methods: {
@@ -102,7 +102,7 @@ export default defineComponent({
         localStorage.removeItem(this.data.event_id);
         this.starred = false;
       } else {
-        localStorage.setItem(this.data.event_id, "true");
+        localStorage.setItem(this.data.event_id, "starred_drp18");
         this.starred = true;
       }
     },
