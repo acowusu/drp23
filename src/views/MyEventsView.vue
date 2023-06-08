@@ -16,17 +16,24 @@ export default defineComponent({
     EventCard,
   },
   async mounted() {
+    let reqs = [];
     for (let i = 0; i < localStorage.length; i++) {
       const event_id = localStorage.key(i);
+      console.log(event_id);
       const options = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ event_id }),
       };
-      await fetch("/api/event", options)
-        .then((response) => response.json())
-        .then((response) => this.items.push(response));
+      console.log(options);
+
+      reqs.push(
+        fetch("/api/event", options)
+          .then((response) => response.json())
+          .then((response) => this.items.push(response))
+      );
     }
+    await Promise.all(reqs);
     console.log(localStorage.length);
     console.log(localStorage.key(0));
   },

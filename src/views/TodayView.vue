@@ -17,7 +17,7 @@ import EventMap from "@/components/EventMap.vue";
 import { NCollapse, NCollapseItem } from "naive-ui";
 import { defineComponent } from "vue";
 export default defineComponent({
-  name: "SearchView",
+  name: "TodayView",
   components: {
     EventCard,
     NCollapse,
