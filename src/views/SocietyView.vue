@@ -1,0 +1,50 @@
+<template>
+  {{ name }} ({{ type }})
+  <n-divider />
+  {{ desc }}
+  <br />
+  <div>
+    <ul>
+      <li v-for="[key, value] in links" :key="key">{{ key }}: {{ value }}</li>
+    </ul>
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent } from "vue";
+import { NDivider } from "naive-ui";
+export default defineComponent({
+  components: {
+    NDivider,
+  },
+  data: function () {
+    return {
+      id: "",
+      name: "",
+      type: "",
+      desc: "",
+      links: new Map([]),
+    };
+  },
+  async mounted() {
+    this.id = String(this.$route.params.society_id);
+    const content = {
+      society_id: this.id,
+    };
+    console.log(content);
+    const options = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(content),
+    };
+    const society = await fetch("api/societyID", options)
+      .then((response) => response.json())
+      .catch((err) => console.error(err));
+
+    this.name = society.name;
+    this.type = society.type;
+    this.desc = society.description;
+    this.links = new Map(Object.entries(society.metadata));
+  },
+});
+</script>
