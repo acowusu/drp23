@@ -15,6 +15,11 @@ firebase.initializeApp({
   appId: "1:21161325016:web:5107d6d36b44204e3c82ad",
 });
 
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faStar as fasFaStar } from "@fortawesome/free-solid-svg-icons";
+import { faStar as farFaStar } from "@fortawesome/free-regular-svg-icons";
+library.add(fasFaStar, farFaStar);
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const InstantSearch = require("vue-instantsearch/vue3/es");
 

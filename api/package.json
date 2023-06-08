@@ -6,6 +6,7 @@
   "dependencies": {
     "algoliasearch": "^4.17.1",
     "pg": "^8.7.1",
+    "postmark": "^3.0.18",
     "vue-instantsearch": "^4.10.1"
   }
 }

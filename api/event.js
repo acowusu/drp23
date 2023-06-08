@@ -2,6 +2,7 @@ const Database = require("./_db");
 const db = new Database();
 
 const QueryBuilder = require("./_eventSearcher");
+const query = new QueryBuilder({ db });
 
 module.exports = async (req, res) => {
   const {
@@ -12,7 +13,6 @@ module.exports = async (req, res) => {
       error: "Need an event id",
     });
   }
-  const query = new QueryBuilder({ db });
 
   res.json(await query.getEvent({ event_id }));
 };

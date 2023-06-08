@@ -91,11 +91,7 @@ module.exports = class db {
   addSearchable(data) {
     return index.saveObject(data);
   }
-  reset(force) {
-    if (process.env.VERCEL_ENV != "development" && !force) {
-      console.error("UNABLE TO RESET PRODUCTION DEPLOYMENT");
-      throw "UNABLE TO RESET PRODUCTION DEPLOYMENT";
-    }
+  reset() {
     const schema = fs.readFileSync(__dirname + "/../sql/schema.sql", {
       encoding: "utf8",
       flag: "r",
@@ -113,7 +109,9 @@ module.exports = class db {
     );
 
     return Promise.all([
-      this.execute(schema + "\n\n" + test_data),
+      this.execute(schema + "\n\n" + test_data).then(() => {
+        console.log("reset complete");
+      }),
       index
         .clearObjects()
         .then(() => index.saveObjects(JSON.parse(searchableData), true)),

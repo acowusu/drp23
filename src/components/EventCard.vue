@@ -14,6 +14,16 @@
     <n-tag rounded :bordered="false" type="error" v-else>
       £{{ data.ticket_price }}</n-tag
     >
+    <n-button text class="event-star" @click="starEvent" v-if="!starred">
+      <n-icon>
+        <font-awesome-icon icon="fa-regular fa-star" />
+      </n-icon>
+    </n-button>
+    <n-button text class="event-star" @click="starEvent" v-else
+      ><n-icon>
+        <font-awesome-icon icon="fa-solid fa-star" />
+      </n-icon>
+    </n-button>
     <n-divider />
     <n-ellipsis expand-trigger="click" line-clamp="2" :tooltip="false">
       {{ data.description }}
@@ -34,7 +44,16 @@
 </template>
 
 <script lang="ts">
-import { NCard, NDivider, NEllipsis, NSpace, NTag } from "naive-ui";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import {
+  NButton,
+  NCard,
+  NDivider,
+  NEllipsis,
+  NIcon,
+  NSpace,
+  NTag,
+} from "naive-ui";
 import { defineComponent } from "vue";
 interface EventPayload {
   name: string;
@@ -46,7 +65,7 @@ interface EventPayload {
   ticket_price: number;
   latitude: number;
   longitude: number;
-  event_id?: string;
+  event_id: string;
   objectID?: string;
   tags: string[];
 }
@@ -59,6 +78,9 @@ export default defineComponent({
     NSpace,
     NDivider,
     NEllipsis,
+    NButton,
+    NIcon,
+    FontAwesomeIcon,
   },
   props: {
     data: {
@@ -66,9 +88,23 @@ export default defineComponent({
       required: true,
     },
   },
+  data: function () {
+    return {
+      starred: localStorage.getItem(this.data.event_id) == "true",
+    };
+  },
   methods: {
     prettyPrint(date: string) {
       return new Date(date).toLocaleString();
+    },
+    starEvent() {
+      if (this.starred) {
+        localStorage.removeItem(this.data.event_id);
+        this.starred = false;
+      } else {
+        localStorage.setItem(this.data.event_id, "true");
+        this.starred = true;
+      }
     },
   },
 });
@@ -93,5 +129,15 @@ li {
 }
 a {
   color: #42b983;
+}
+.event-star {
+  font-size: 32px;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+.fa-star {
+  box-shadow: rgb(255 255 255 / 27%) 0px 0px 20px 12px;
+  background: rgb(255 255 255 / 27%);
 }
 </style>

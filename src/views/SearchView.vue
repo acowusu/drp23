@@ -30,7 +30,7 @@
               <EventCard
                 v-for="item in items"
                 :key="item.objectID"
-                :data="item"
+                :data="addEventID(item)"
               />
             </div>
           </template>
@@ -122,6 +122,10 @@ export default defineComponent({
   methods: {
     onPageChange() {
       window.scrollTo(0, 0);
+    },
+    addEventID(item: any) {
+      item.event_id = item.objectID;
+      return item;
     },
   },
   data() {
