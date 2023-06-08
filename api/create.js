@@ -1,33 +1,33 @@
 const Database = require("./_db");
 const db = new Database();
-
+const subscriptionManager = require("./_subscriptionManager");
 const EventMaker = require("./_eventMaker");
+const Maker = new EventMaker({ db, subscriptionManager });
 
 module.exports = async (req, res) => {
   const {
     body: {
       name,
       description,
-      thumbnail,
+      image_url,
       society,
       location,
-      start_datetime,
+      date_time,
       ticket_price,
       latitude,
       longitude,
       tags,
     },
   } = req;
-  const Maker = new EventMaker({ db });
 
   try {
     const event_id = await Maker.create({
       name,
       description,
-      thumbnail,
+      image_url,
       society,
       location,
-      start_datetime,
+      date_time,
       ticket_price,
       latitude,
       longitude,

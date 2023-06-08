@@ -1,5 +1,6 @@
 const Database = require("./_db");
 const db = new Database();
+const userManager = require("./_userManager");
 
 module.exports = async (req, res) => {
   console.log(req.body);
@@ -9,6 +10,7 @@ module.exports = async (req, res) => {
 
   try {
     await db.reset(force);
+
     res.json({
       success: true,
     });

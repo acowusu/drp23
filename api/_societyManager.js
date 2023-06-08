@@ -7,19 +7,18 @@ module.exports = class {
     return this.db.getRows(
       /*sql */ `
       SELECT 
-       t.tag_id,
-       t.tag_name
-      FROM tags t
+       s.name
+      FROM society s
 `,
       []
     );
   }
-  create({ tag_name }) {
+  create({ name, type }) {
     return this.db.getRow(
       /*sql */ `
-      INSERT INTO tags (tag_name)
-      VALUES ($1) RETURNING tag_id`,
-      [tag_name]
+      INSERT INTO society (name, type)
+      VALUES ($1, $2) RETURNING society_id`,
+      [name, type]
     );
   }
 };
