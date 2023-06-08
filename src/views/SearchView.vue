@@ -68,7 +68,7 @@ import {
 import { computed, defineComponent, nextTick, ref, watch } from "vue";
 const searchable_app_id = process.env.VUE_APP_searchable_app_id;
 const searchable_read_key = process.env.VUE_APP_searchable_read_key;
-const searchClient = algoliasearch(searchable_app_id, searchable_read_key);
+const searchClient = algoliasearch(searchable_app_id!, searchable_read_key!);
 const searchIndex = process.env.VUE_APP_searchable_index;
 export default defineComponent({
   name: "SearchView",

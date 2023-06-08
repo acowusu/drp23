@@ -3,13 +3,12 @@
     <n-form-item path="name" label="Name">
       <n-input v-model:value="model.name" />
     </n-form-item>
-
     <n-form-item path="description" label="Description">
       <n-input v-model:value="model.description" />
     </n-form-item>
-    <n-form-item path="image_url" label="Image Url">
-      <n-input v-model:value="model.image_url" />
-    </n-form-item>
+    <n-upload @before-upload="beforeUpload" @on-success="onUploadSuccess">
+      <n-button>Upload Image</n-button>
+    </n-upload>
     <n-form-item path="organizer" label="Organizer">
       <n-input v-model:value="model.organizer" />
     </n-form-item>
@@ -93,8 +92,12 @@ import {
   NCheckboxGroup,
   NGrid,
   NGi,
+  NUpload,
+  useMessage,
 } from "naive-ui";
 import { defineComponent } from "vue";
+import firebase from "firebase/compat/app";
+import "firebase/compat/storage";
 
 const now = new Date();
 const nowstr =
@@ -138,6 +141,7 @@ export default defineComponent({
     NCheckboxGroup,
     NGrid,
     NGi,
+    NUpload,
   },
   data() {
     return {
@@ -154,9 +158,9 @@ export default defineComponent({
         id: -1,
         tags: [],
       },
+      message: useMessage(),
     };
   },
-
   methods: {
     async handleValidateButtonClick() {
       const options = {
@@ -175,6 +179,30 @@ export default defineComponent({
           });
         })
         .catch((err) => console.error(err));
+    },
+    beforeUpload(data: any) {
+      const type = data.file.file?.type;
+      if (
+        type !== "image/png" &&
+        type !== "image/jpeg" &&
+        type !== "image/jpg"
+      ) {
+        this.message.error(
+          "Only upload picture files in jpeg, jpg or png format, please re-upload."
+        );
+        return false;
+      }
+      return true;
+    },
+    onUploadSuccess(data: any) {
+      const random = Math.random().toString(36).substring(2);
+      const storageRef = firebase.storage().ref(random);
+      storageRef.put(data).then(() => {
+        storageRef.getDownloadURL().then((url: string) => {
+          this.model.image_url = url;
+          console.log(this.model.image_url);
+        });
+      });
     },
   },
 });
