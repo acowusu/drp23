@@ -2,7 +2,6 @@ const Database = require("./_db");
 const db = new Database();
 
 module.exports = async (req, res) => {
-
   try {
     await db.reset();
     res.json({
