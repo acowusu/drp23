@@ -92,10 +92,6 @@ module.exports = class db {
     return index.saveObject(data);
   }
   reset() {
-    if (process.env.VERCEL_ENV != "development") {
-      console.error("UNABLE TO RESET PRODUCTION DEPLOYMENT");
-      throw "UNABLE TO RESET PRODUCTION DEPLOYMENT";
-    }
     const schema = fs.readFileSync(__dirname + "/../sql/schema.sql", {
       encoding: "utf8",
       flag: "r",
