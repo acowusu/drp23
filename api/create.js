@@ -1,7 +1,8 @@
 const Database = require("./_db");
 const db = new Database();
-
+const subscriptionManager = require("./_subscriptionManager");
 const EventMaker = require("./_eventMaker");
+const Maker = new EventMaker({ db, subscriptionManager });
 
 module.exports = async (req, res) => {
   const {
@@ -18,7 +19,6 @@ module.exports = async (req, res) => {
       tags,
     },
   } = req;
-  const Maker = new EventMaker({ db });
 
   try {
     const event_id = await Maker.create({

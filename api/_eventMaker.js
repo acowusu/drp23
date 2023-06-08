@@ -1,6 +1,7 @@
 module.exports = class {
-  constructor({ db }) {
+  constructor({ db, subscriptionManager }) {
     this.db = db;
+    this.subscriptionManager = subscriptionManager;
   }
 
   async create({
@@ -94,6 +95,17 @@ module.exports = class {
     } finally {
       client.release();
     }
-    return id;
+    this.subscriptionManager.notify({
+      name,
+      description,
+      image_url,
+      society,
+      location,
+      date_time,
+      ticket_price,
+      latitude,
+      longitude,
+      tags,
+    });
   }
 };

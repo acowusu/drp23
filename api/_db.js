@@ -109,7 +109,9 @@ module.exports = class db {
     );
 
     return Promise.all([
-      this.execute(schema + "\n\n" + test_data),
+      this.execute(schema + "\n\n" + test_data).then(() => {
+        console.log("reset complete");
+      }),
       index
         .clearObjects()
         .then(() => index.saveObjects(JSON.parse(searchableData), true)),
