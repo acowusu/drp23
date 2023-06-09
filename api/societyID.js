@@ -6,9 +6,7 @@ const societyManager = new SocietyManager({ db });
 
 module.exports = async (req, res) => {
   const {
-    body: {
-        society_id
-    }
+    body: { society_id },
   } = req;
   console.log(society_id);
   res.json(await societyManager.getID({ society_id }));
