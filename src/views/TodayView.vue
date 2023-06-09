@@ -1,10 +1,10 @@
 <template>
   <div class="home">
-    <n-collapse>
+    <!-- <n-collapse>
       <n-collapse-item title="Map View" name="1">
         <EventMap :items="items" />
       </n-collapse-item>
-    </n-collapse>
+    </n-collapse> -->
     <div class="results">
       <EventCard v-for="item in items" :key="item" :data="item" />
     </div>
@@ -13,16 +13,16 @@
 
 <script lang="ts">
 import EventCard from "@/components/EventCard.vue"; // @ is an alias to /src
-import EventMap from "@/components/EventMap.vue";
-import { NCollapse, NCollapseItem } from "naive-ui";
+// import EventMap from "@/components/EventMap.vue";
+// import { NCollapse, NCollapseItem } from "naive-ui";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "TodayView",
   components: {
     EventCard,
-    NCollapse,
-    NCollapseItem,
-    EventMap,
+    // NCollapse,
+    // NCollapseItem,
+    // EventMap,
   },
   async mounted() {
     const options = {

@@ -5,5 +5,5 @@ const QueryBuilder = require("./_eventSearcher");
 const query = new QueryBuilder({ db });
 
 module.exports = async (req, res) => {
-  res.json(await query.allEvents());
+  res.json(await query.eventsToday());
 };

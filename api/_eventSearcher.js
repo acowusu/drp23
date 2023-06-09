@@ -141,6 +141,50 @@ module.exports = class {
         return rows;
       });
   }
+  eventsToday() {
+    return this.db
+      .getRows(
+        `SELECT
+      e.event_id,
+      e.name,
+      e.description,
+      e.image_url,
+      e.society,
+      e.location,
+      e.date_time,
+      e.ticket_price,
+      e.latitude,
+      e.longitude,
+      string_agg(t.tag_name, ';') AS tags
+    FROM
+      events e
+    JOIN
+      eventTags et ON e.event_id = et.event_id
+    JOIN
+      tags t ON et.tag_id = t.tag_id
+    WHERE
+    CAST(e.date_time AS DATE) = CURRENT_DATE
+    GROUP BY
+      e.event_id,
+      e.name,
+      e.description,
+      e.image_url,
+      e.society,
+      e.location,
+      e.date_time,
+      e.ticket_price,
+      e.latitude,
+      e.longitude;
+    `,
+        []
+      )
+      .then((rows) => {
+        rows.forEach((row) => {
+          row.tags = row.tags.split(";");
+        });
+        return rows;
+      });
+  }
 
   search({
     startAt = new Date(),
