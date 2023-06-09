@@ -112,4 +112,56 @@ module.exports = class {
     `;
     await this.email.send({ to, subject, content });
   }
+
+  async sendDigest(userEmail) {
+    const nextWeekStartDate = new Date();
+    nextWeekStartDate.setDate(nextWeekStartDate.getDate() + 7);
+
+    const nextWeekEndDate = new Date();
+    nextWeekEndDate.setDate(nextWeekEndDate.getDate() + 14);
+
+    const result = await this.db.getRows(
+      /*sql */ `
+        SELECT s.name AS society_name, e.name AS event_name, e.image_url, e.description, e.location, e.date_time, e.ticket_price
+        FROM subscription sub
+        JOIN society s ON s.society_id = sub.society_id
+        JOIN event e ON e.society_id = s.society_id
+        WHERE sub.user_id = (SELECT user_id FROM users WHERE email = $1)
+        AND e.date_time >= $2
+        AND e.date_time < $3`,
+      [userEmail, nextWeekStartDate, nextWeekEndDate]
+    );
+
+    const events = result.map((row) => ({
+      society: row.society_name,
+      name: row.event_name,
+      image_url: row.image_url,
+      description: row.description,
+      location: row.location,
+      date_time: row.date_time,
+      ticket_price: row.ticket_price,
+    }));
+
+    if (events.length === 0) {
+      return; // No events to notify
+    }
+
+    const to = userEmail;
+    const subject = `Upcoming Events for ${to}`;
+    const content = events
+      .map(
+        (event) => `
+          <h1>${event.society}</h1>
+          <h2>${event.name}</h2>
+          <img src="${event.image_url}" alt="${event.name}"/>
+          <p>${event.description}</p>
+          <p>${event.location}</p>
+          <p>${event.date_time}</p>
+          <p>${event.ticket_price}</p>
+          `
+      )
+      .join("");
+
+    await this.email.send({ to, subject, content });
+  }
 };
