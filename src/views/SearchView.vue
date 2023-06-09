@@ -114,7 +114,7 @@ export default defineComponent({
     });
     return {
       autoCompleteInstRef,
-      tags: ref(["Free Drinks", "Open To All"]),
+      tags: ref(["Free Drinks", "No membership required"]),
       inputValue: inputValueRef,
       options,
     };
