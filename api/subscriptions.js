@@ -6,7 +6,7 @@ const subscriptionManager = new SubscriptionManager({ db });
 
 module.exports = async (req, res) => {
   const {
-    body: { email = null },
+    body: { email = null, society = null, subscribe = null },
   } = req;
 
   if (!email) {
@@ -14,6 +14,11 @@ module.exports = async (req, res) => {
       error: "Need an email",
     });
   }
-
-  res.json(await subscriptionManager.getAll({ email }));
+  if (subscribe === true) {
+    res.json(await subscriptionManager.subscribe({ email, society }));
+  } else if (subscribe === false) {
+    res.json(await subscriptionManager.unsubscribe({ email, society }));
+  } else {
+    res.json(await subscriptionManager.getAll({ email }));
+  }
 };

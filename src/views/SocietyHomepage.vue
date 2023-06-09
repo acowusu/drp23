@@ -10,7 +10,7 @@
     </n-select>
   </div>
   <div class="results" v-if="selected == true">
-    <router-link :to="{ path: `/society/${societyID}` }">
+    <router-link :to="{ path: `/society/${chosenSociety}` }">
       Society page
     </router-link>
     <n-card content-style="padding: 0;">
@@ -52,17 +52,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
 import {
-  NSelect,
+  NButton,
+  NCard,
   NForm,
   NFormItem,
   NInput,
-  NCard,
-  NTabs,
-  NButton,
+  NSelect,
   NTabPane,
+  NTabs,
 } from "naive-ui";
+import { defineComponent } from "vue";
 
 export default defineComponent({
   components: {
@@ -93,25 +93,13 @@ export default defineComponent({
   },
   methods: {
     async handleSelect(option: any) {
+      option = JSON.parse(option);
       this.selected = true;
       this.chosenSociety = option.name;
-      const content = {
-        name: this.chosenSociety,
-      };
-      const options = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(content),
-      };
-      await fetch("api/society", options)
-        .then((response) => response.json())
-        .then((response) => {
-          console.log(response);
-          this.description = response.description;
-          this.societyID = response.society_id;
-        })
-        .catch((err) => console.error(err));
-      console.log(this.societyID);
+      this.description = option.description;
+      this.links.instagram = option?.metadata?.instagram || "";
+      this.links.whatsapp = option?.metadata?.whatsapp || "";
+      this.societyID = option.society_id;
     },
     async getSocs() {
       console.log("Here");
@@ -120,12 +108,12 @@ export default defineComponent({
         headers: { "Content-Type": "application/json" },
       };
       console.log("Here2");
-      return await fetch("/api/societies", options)
+      return await fetch("/api/society", options)
         .then((response) => response.json())
         .then((response) =>
           response.map((society: any) => ({
             label: society.name,
-            value: society,
+            value: JSON.stringify(society),
           }))
         )
         .catch((err) => console.error(err));

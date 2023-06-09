@@ -29,7 +29,7 @@ export default defineComponent({
   async mounted() {
     this.id = String(this.$route.params.society_id);
     const content = {
-      society_id: this.id,
+      name: this.id,
     };
     console.log(content);
     const options = {
@@ -37,7 +37,7 @@ export default defineComponent({
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(content),
     };
-    const society = await fetch("api/societyID", options)
+    const society = await fetch("api/society", options)
       .then((response) => response.json())
       .catch((err) => console.error(err));
 

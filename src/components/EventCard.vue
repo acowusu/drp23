@@ -3,8 +3,8 @@
     <template #cover>
       <img :src="data.image_url" />
     </template>
-    <template #header-extra v-if="society_id != ''">
-      <router-link :to="{ path: `/society/${society_id}` }">
+    <template #header-extra v-if="data.society != ''">
+      <router-link :to="{ path: `/society/${data.society}` }">
         {{ data.society }}
       </router-link></template
     >
@@ -98,9 +98,7 @@ export default defineComponent({
       society_id: "",
     };
   },
-  async mounted() {
-    await this.getSocietyID();
-  },
+
   methods: {
     prettyPrint(date: string) {
       return new Date(date).toLocaleString();
@@ -113,23 +111,6 @@ export default defineComponent({
         localStorage.setItem(this.data.event_id, "starred_drp18");
         this.starred = true;
       }
-    },
-    async getSocietyID() {
-      const content = {
-        name: this.data.society,
-      };
-      const options = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(content),
-      };
-      await fetch("api/society", options)
-        .then((response) => response.json())
-        .then((response) => {
-          console.log(response);
-          this.society_id = response.society_id;
-        })
-        .catch((err) => console.error(err));
     },
   },
 });

@@ -64,7 +64,7 @@ export default defineComponent({
         headers: { "Content-Type": "application/json" },
       };
 
-      await fetch("/api/societies", options)
+      await fetch("/api/society", options)
         .then((response) => response.json())
         .then((response) => (this.societies = response))
         .catch((err) => console.error(err));
@@ -86,10 +86,10 @@ export default defineComponent({
       const options = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: this.email, society }),
+        body: JSON.stringify({ email: this.email, society, subscribe: false }),
       };
 
-      await fetch("/api/unsubscribe", options).catch((err) =>
+      await fetch("/api/subscriptions", options).catch((err) =>
         console.error(err)
       );
       await this.getList();
@@ -98,10 +98,12 @@ export default defineComponent({
       const options = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: this.email, society }),
+        body: JSON.stringify({ email: this.email, society, subscribe: true }),
       };
 
-      await fetch("/api/subscribe", options).catch((err) => console.error(err));
+      await fetch("/api/subscriptions", options).catch((err) =>
+        console.error(err)
+      );
       await this.getList();
     },
   },

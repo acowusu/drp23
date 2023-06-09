@@ -12,21 +12,29 @@ module.exports = class Email {
     return this.client;
   }
   async send({ content, subject, to }) {
+    console.log("Sending email to", to, process.env.postmark_api);
     if (typeof to === "string") {
       to = [to];
     }
     if (to.length === 0) {
       return;
     }
-    await this.client.sendEmailBatch(
-      to.map((To) => {
-        return {
-          From: "noreply@whatson.vercel.app",
-          To,
-          Subject: subject,
-          HtmlBody: content,
-        };
-      })
-    );
+    try {
+      console.log(
+        await this.client.sendEmailBatch(
+          to.map((To) => {
+            return {
+              From: "ao921@ic.ac.uk",
+              To,
+              Subject: subject,
+              HtmlBody: content,
+              MessageStream: "broadcast",
+            };
+          })
+        )
+      );
+    } catch (e) {
+      console.log(e);
+    }
   }
 };
