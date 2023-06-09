@@ -3,7 +3,11 @@
     <template #cover>
       <img :src="data.image_url" />
     </template>
-    <template #header-extra> {{ data.society }} </template>
+    <template #header-extra v-if="society_id != ''">
+      <router-link :to="{ path: `/society/${society_id}` }">
+        {{ data.society }}
+      </router-link></template
+    >
     <n-tag
       rounded
       :bordered="false"
@@ -90,8 +94,12 @@ export default defineComponent({
   },
   data: function () {
     return {
-      starred: localStorage.getItem(this.data.event_id) == "true",
+      starred: localStorage.getItem(this.data.event_id) == "starred_drp18",
+      society_id: "",
     };
+  },
+  async mounted() {
+    await this.getSocietyID();
   },
   methods: {
     prettyPrint(date: string) {
@@ -102,9 +110,26 @@ export default defineComponent({
         localStorage.removeItem(this.data.event_id);
         this.starred = false;
       } else {
-        localStorage.setItem(this.data.event_id, "true");
+        localStorage.setItem(this.data.event_id, "starred_drp18");
         this.starred = true;
       }
+    },
+    async getSocietyID() {
+      const content = {
+        name: this.data.society,
+      };
+      const options = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(content),
+      };
+      await fetch("api/society", options)
+        .then((response) => response.json())
+        .then((response) => {
+          console.log(response);
+          this.society_id = response.society_id;
+        })
+        .catch((err) => console.error(err));
     },
   },
 });

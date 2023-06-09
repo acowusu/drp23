@@ -48,6 +48,17 @@ const routes: Array<RouteRecordRaw> = [
     name: "myevents",
     component: () => import("../views/MyEventsView.vue"),
   },
+  {
+    path: "/societyhomepage",
+    name: "societyhomepage",
+    component: () => import("../views/SocietyHomepage.vue"),
+  },
+  {
+    path: "/society/:society_id",
+    name: "society",
+    component: () =>
+      import(/* webpackChunkName: "event" */ "../views/SocietyView.vue"),
+  },
 ];
 
 const router = createRouter({

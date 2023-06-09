@@ -16,7 +16,7 @@
       style="display: none"
     />
     <n-form-item path="society" label="society">
-      <n-input v-model:value="model.society" />
+      <n-input v-model:value="model.society" :disabled="true" />
     </n-form-item>
     <n-form-item path="location" label="Location">
       <n-input v-model:value="model.location" />
@@ -161,8 +161,12 @@ export default defineComponent({
         id: -1,
         tags: [],
       },
+      society: "",
       message: useMessage(),
     };
+  },
+  mounted() {
+    this.model.society = String(this.$route.query.society);
   },
   methods: {
     async handleValidateButtonClick() {
@@ -236,8 +240,6 @@ export default defineComponent({
           // Handle unsuccessful uploads
         },
         () => {
-          // Handle successful uploads on complete
-          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             console.log("File available at", downloadURL);
             this.model.image_url = downloadURL;
