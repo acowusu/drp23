@@ -10,9 +10,6 @@
     </n-select>
   </div>
   <div class="results" v-if="selected == true">
-    <router-link :to="{ path: `/society/${chosenSociety}` }">
-      Society page
-    </router-link>
     <n-card content-style="padding: 0;">
       <n-tabs
         type="line"
@@ -26,12 +23,15 @@
               <n-input v-model:value="description"></n-input>
             </n-form-item>
             <n-form-item label="Instagram">
-              <n-input v-model:value="links.instagram"></n-input>
+              <n-input v-model:value="links.Instagram"></n-input>
             </n-form-item>
             <n-form-item label="WhatsApp">
-              <n-input v-model:value="links.whatsapp"></n-input>
+              <n-input v-model:value="links.Whatsapp"></n-input>
             </n-form-item>
             <n-button type="primary" @click="pushEdit"> Edit </n-button>
+            <router-link :to="{ path: `/society/${chosenSociety}` }">
+              Society page
+            </router-link>
           </n-form>
         </n-tab-pane>
 
@@ -42,7 +42,7 @@
               query: { society: chosenSociety },
             }"
           >
-            Society Page
+            Create Event
           </router-link>
         </n-tab-pane>
       </n-tabs>
@@ -79,8 +79,8 @@ export default defineComponent({
     return {
       description: "",
       links: {
-        instagram: "",
-        whatsapp: "",
+        Instagram: "",
+        Whatsapp: "",
       },
       selected: false,
       chosenSociety: "",
@@ -97,8 +97,8 @@ export default defineComponent({
       this.selected = true;
       this.chosenSociety = option.name;
       this.description = option.description;
-      this.links.instagram = option?.metadata?.instagram || "";
-      this.links.whatsapp = option?.metadata?.whatsapp || "";
+      this.links.Instagram = option?.metadata?.Instagram || "";
+      this.links.Whatsapp = option?.metadata?.Whatsapp || "";
       this.societyID = option.society_id;
     },
     async getSocs() {
