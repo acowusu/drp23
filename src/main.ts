@@ -3,21 +3,10 @@ import App from "./App.vue";
 import "./registerServiceWorker";
 import router from "./router";
 import store from "./store";
-import * as firebase from "firebase/app";
-import "firebase/storage";
-
-firebase.initializeApp({
-  apiKey: "AIzaSyAZ-4dltXCdUP-8xOdkZ9NZ12Qpk96iMQg",
-  authDomain: "drp18-4ef46.firebaseapp.com",
-  projectId: "drp18-4ef46",
-  storageBucket: "drp18-4ef46.appspot.com",
-  messagingSenderId: "21161325016",
-  appId: "1:21161325016:web:5107d6d36b44204e3c82ad",
-});
 
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faStar as fasFaStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as farFaStar } from "@fortawesome/free-regular-svg-icons";
+import { faStar as fasFaStar } from "@fortawesome/free-solid-svg-icons";
 library.add(fasFaStar, farFaStar);
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires

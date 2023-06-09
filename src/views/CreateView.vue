@@ -6,11 +6,17 @@
     <n-form-item path="description" label="Description">
       <n-input v-model:value="model.description" />
     </n-form-item>
-    <n-upload @before-upload="beforeUpload" @on-success="onUploadSuccess">
-      <n-button>Upload Image</n-button>
-    </n-upload>
-    <n-form-item path="organizer" label="Organizer">
-      <n-input v-model:value="model.organizer" />
+
+    <n-button @click="triggerPicker">Upload Image</n-button>
+    <input
+      type="file"
+      accept="image/*"
+      @change="upload"
+      ref="hiddenUpload"
+      style="display: none"
+    />
+    <n-form-item path="society" label="society">
+      <n-input v-model:value="model.society" />
     </n-form-item>
     <n-form-item path="location" label="Location">
       <n-input v-model:value="model.location" />
@@ -28,7 +34,7 @@
       <n-input-number v-model:value="model.ticket_price" />
     </n-form-item>
     <n-form-item path="tags" label="Tags">
-      <n-checkbox-group>
+      <n-checkbox-group v-model:value="model.tags">
         <n-grid :y-gap="10" :cols="1">
           <n-gi>
             <n-checkbox
@@ -54,13 +60,6 @@
         </n-grid>
       </n-checkbox-group>
     </n-form-item>
-    <n-form-item path="latitude" label="Latitude">
-      <n-input-number v-model:value="model.latitude" />
-    </n-form-item>
-    <n-form-item path="longitude" label="Longitude">
-      <n-input-number v-model:value="model.longitude" />
-    </n-form-item>
-
     <n-row :gutter="[0, 24]">
       <n-col :span="24">
         <div style="display: flex; justify-content: flex-end">
@@ -80,25 +79,28 @@
 
 <script lang="ts">
 import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
+import {
   NButton,
+  NCheckbox,
+  NCheckboxGroup,
   NCol,
   NDatePicker,
   NForm,
   NFormItem,
+  NGi,
+  NGrid,
   NInput,
   NInputNumber,
   NRow,
-  NCheckbox,
-  NCheckboxGroup,
-  NGrid,
-  NGi,
-  NUpload,
   useMessage,
 } from "naive-ui";
 import { defineComponent } from "vue";
-import firebase from "firebase/compat/app";
-import "firebase/compat/storage";
-
+import firebase from "../fb";
 const now = new Date();
 const nowstr =
   now.getFullYear() +
@@ -117,7 +119,7 @@ interface EventPayload {
   name: string;
   description: string;
   image_url: string;
-  organizer: string;
+  society: string;
   location: string;
   date_time: string;
   ticket_price: number;
@@ -141,8 +143,8 @@ export default defineComponent({
     NCheckboxGroup,
     NGrid,
     NGi,
-    NUpload,
   },
+
   data() {
     return {
       societies: [] as { label: string; value: string }[],
@@ -150,7 +152,7 @@ export default defineComponent({
         name: "",
         description: "",
         image_url: "",
-        organizer: "",
+        society: "",
         location: "",
         date_time: "2023-07-22 12:00:00",
         ticket_price: 0,
@@ -181,6 +183,11 @@ export default defineComponent({
         })
         .catch((err) => console.error(err));
     },
+    triggerPicker() {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      this.$refs.hiddenUpload.click();
+    },
     beforeUpload(data: any) {
       const type = data.file.file?.type;
       if (
@@ -195,15 +202,48 @@ export default defineComponent({
       }
       return true;
     },
-    onUploadSuccess(data: any) {
+    upload(data: Event) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      let file = (data.target as HTMLInputElement).files[0];
+
       const random = Math.random().toString(36).substring(2);
-      const storageRef = firebase.storage().ref(random);
-      storageRef.put(data).then(() => {
-        storageRef.getDownloadURL().then((url: string) => {
-          this.model.image_url = url;
-          console.log(this.model.image_url);
-        });
-      });
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const storage = getStorage(firebase);
+      const storageRef = ref(storage, random);
+
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          // Observe state change events such as progress, pause, and resume
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log("Upload is " + progress + "% done");
+          switch (snapshot.state) {
+            case "paused":
+              console.log("Upload is paused");
+              break;
+            case "running":
+              console.log("Upload is running");
+              break;
+          }
+        },
+        (error) => {
+          // Handle unsuccessful uploads
+        },
+        () => {
+          // Handle successful uploads on complete
+          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log("File available at", downloadURL);
+            this.model.image_url = downloadURL;
+          });
+        }
+      );
     },
   },
 });

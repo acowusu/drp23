@@ -107,5 +107,6 @@ module.exports = class {
       longitude,
       tags,
     });
+    return id;
   }
 };
