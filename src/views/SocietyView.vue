@@ -5,7 +5,13 @@
   <br />
   <div>
     <ul>
-      <li v-for="[key, value] in links" :key="key">{{ key }}: {{ value }}</li>
+      <li
+        style="list-style-type: none"
+        v-for="[key, value] in links"
+        :key="key"
+      >
+        <a v-bind:href="value">{{ key }}</a>
+      </li>
     </ul>
   </div>
 </template>

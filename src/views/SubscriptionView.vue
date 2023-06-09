@@ -1,7 +1,10 @@
 <template>
   <div class="home">
     <h1>Subscriptions</h1>
-    <p>Subscribe to societies to get updates on their events</p>
+    <p>
+      Enter your email to subscribe to societies and recieve notifications about
+      new events
+    </p>
     <div class="form">
       <n-input
         v-model:value="email"
