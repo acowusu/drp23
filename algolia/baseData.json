@@ -10,7 +10,7 @@
     "latitude": 40.7829,
     "longitude": -73.9654,
     "id": 1,
-    "tags": ["No membership required", "Free snacks", "Alcohol free"],
+    "tags": ["No membership required", "Free snacks", "Free drinks"],
     "timestamp": 1686853800000,
     "_geoloc": {
       "lat": 40.7829,
@@ -67,7 +67,7 @@
     "latitude": 40.7589,
     "longitude": -73.9851,
     "id": 4,
-    "tags": ["No membership required", "Free snacks", "Alcohol free"],
+    "tags": ["No membership required", "Free food", "Alcohol free"],
     "timestamp": 1690023600000,
     "_geoloc": {
       "lat": 40.782,
