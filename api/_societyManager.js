@@ -11,8 +11,8 @@ module.exports = class {
         s.type,
         s.description,
         s.metadata
-
       FROM society s
+      ORDER BY s.name ASC
 `,
       []
     );

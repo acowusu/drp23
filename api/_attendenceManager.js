@@ -3,40 +3,37 @@ module.exports = class {
     this.db = db;
   }
 
-  async getId({ email }) {
+  async getAttending({ email }) {
     const client = await this.db.getClient();
     try {
       await client.query("BEGIN");
       const user_result = await client.query(
         /*sql */ `
-        SELECT user_id
-        FROM users
-        WHERE email = $1 order by user_id desc limit 1;`,
+        SELECT event_id FROM attending
+        WHERE user_id = (SELECT user_id
+          FROM users
+          WHERE email = $1)`,
         [email]
       );
-      console.log("user_result", user_result);
-      const user_id = user_result.rows[0].user_id;
-
-      return user_id;
+      return user_result.rows.map((row) => row.event_id);
     } catch (e) {
       await client.query("ROLLBACK");
       throw e;
     }
   }
-  async create({ email }) {
-    console.log("email", email);
+  async create({ user_id, event_id }) {
     const client = await this.db.getClient();
     try {
       await client.query("BEGIN");
       const user_result = await client.query(
         /*sql */ `
-        INSERT INTO users (email)
-        VALUES ($1) RETURNING user_id`,
-        [email]
+        INSERT INTO attending (user_id, event_id)
+        VALUES ($1, $2) RETURNING event_id`,
+        [user_id, event_id]
       );
-      const user_id = user_result.rows[0].user_id;
+      event_id = user_result.rows[0].event_id;
       await client.query("COMMIT");
-      return user_id;
+      return event_id;
     } catch (e) {
       await client.query("ROLLBACK");
       throw e;
@@ -44,21 +41,20 @@ module.exports = class {
       client.release();
     }
   }
-  async getAll() {
+  async delete({ user_id, event_id }) {
     const client = await this.db.getClient();
     try {
       await client.query("BEGIN");
-      const result = await client.query(
+      const user_result = await client.query(
         /*sql */ `
-        SELECT 
-         u.user_id,
-         u.email
-        FROM users u
-  `,
-        []
+        DELETE FROM  attending 
+        WHERE  user_id = $1 AND event_id =  $2
+        RETURNING event_id`,
+        [user_id, event_id]
       );
+      event_id = user_result.rows[0].event_id;
       await client.query("COMMIT");
-      return result.rows;
+      return event_id;
     } catch (e) {
       await client.query("ROLLBACK");
       throw e;

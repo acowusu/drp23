@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <div class="results">
-      <EventCard v-if="item" :data="item" />
+      <EventCard individual v-if="item" :data="item" />
     </div>
   </div>
 </template>

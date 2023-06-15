@@ -1,24 +1,27 @@
 <template>
-  {{ name }} ({{ type }})
-  <n-divider />
-  {{ desc }}
-  <br />
-  <div>
-    <ul>
-      <li
-        style="list-style-type: none"
-        v-for="[key, value] in links"
-        :key="key"
-      >
-        <a v-bind:href="value">{{ key }}</a>
-      </li>
-    </ul>
+  <div class="container">
+    <h1>{{ name }}</h1>
+    <h3>{{ type }}</h3>
+    <n-divider />
+    <div v-html="desc" class="content"></div>
+    <br />
+    <div>
+      <ul>
+        <li
+          style="list-style-type: none"
+          v-for="[key, value] in links"
+          :key="key"
+        >
+          <a v-bind:href="value">{{ key }}</a>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
 import { NDivider } from "naive-ui";
+import { defineComponent } from "vue";
 export default defineComponent({
   components: {
     NDivider,
@@ -56,3 +59,27 @@ export default defineComponent({
   },
 });
 </script>
+<style lang="scss" scoped>
+.container {
+  height: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 10% 0 10%;
+}
+.content {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  img {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+}
+</style>

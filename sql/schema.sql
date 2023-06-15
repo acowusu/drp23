@@ -73,6 +73,12 @@ CREATE TABLE subscription (
     FOREIGN KEY (society_id) REFERENCES society (society_id)
 );
 
-
+CREATE TABLE attending (
+    attending_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID,
+    event_id UUID,
+    FOREIGN KEY (user_id) REFERENCES users (user_id),
+    FOREIGN KEY (event_id) REFERENCES events (event_id)
+);
 
 COMMIT;

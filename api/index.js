@@ -1,0 +1,37 @@
+const bodyParser = require("body-parser");
+const app = require("express")();
+app.use(bodyParser.json());
+
+const { v4 } = require("uuid");
+const subscriptions = require("./_subscriptions.js");
+const society = require("./_society.js");
+const user = require("./_user.js");
+const users = require("./_users.js");
+const tags = require("./_tags.js");
+const events = require("./_events.js");
+const createUser = require("./_createUser.js");
+const digest = require("./_digest.js");
+const create = require("./_create.js");
+const search = require("./_search.js");
+const reset = require("./_reset.js");
+const event = require("./_event.js");
+const attend = require("./_attend.js");
+const updateSociety = require("./_updateSociety.js");
+const scrapeUnion = require("./_scrapeUnion.js");
+
+app.post("/api/subscriptions", subscriptions);
+app.post("/api/society", society);
+app.post("/api/user", user);
+app.get("/api/users", users);
+app.post("/api/tags", tags);
+app.post("/api/events", events);
+app.post("/api/createUser", createUser);
+app.post("/api/digest", digest);
+app.post("/api/create", create);
+app.post("/api/search", search);
+app.post("/api/reset", reset);
+app.post("/api/event", event);
+app.post("/api/attend", attend);
+app.post("/api/update_society", updateSociety);
+app.post("/api/scrape_union", scrapeUnion);
+module.exports = app;

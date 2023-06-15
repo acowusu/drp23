@@ -28,6 +28,32 @@
         <font-awesome-icon icon="fa-solid fa-star" />
       </n-icon>
     </n-button>
+    <n-tooltip trigger="hover">
+      <template #trigger>
+        <n-button
+          text
+          :disabled="disableAttending"
+          class="event-attend"
+          @click="updateAttending"
+          v-if="!isAttending"
+        >
+          <n-icon>
+            <font-awesome-icon icon="fa-regular  fa-thumbs-up" />
+          </n-icon>
+        </n-button>
+        <n-button
+          :disabled="disableAttending"
+          text
+          class="event-attend"
+          @click="updateAttending"
+          v-else
+          ><n-icon>
+            <font-awesome-icon icon="fa-solid  fa-thumbs-up" />
+          </n-icon>
+        </n-button>
+      </template>
+      Let the Organizer know that you're attending!
+    </n-tooltip>
     <n-divider />
     <n-ellipsis expand-trigger="click" line-clamp="2" :tooltip="false">
       {{ data.description }}
@@ -40,7 +66,10 @@
       <n-tag v-for="tag in data.tags" :key="tag">{{ tag }}</n-tag>
     </n-space>
     <template #footer>
-      <router-link :to="`/event/${data?.event_id || data?.objectID}`">
+      <router-link
+        v-if="!individual"
+        :to="`/event/${data?.event_id || data?.objectID}`"
+      >
         view
       </router-link>
     </template>
@@ -48,6 +77,7 @@
 </template>
 
 <script lang="ts">
+import { EventPayload } from "@/types";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import {
   NButton,
@@ -57,22 +87,10 @@ import {
   NIcon,
   NSpace,
   NTag,
+  NTooltip,
 } from "naive-ui";
 import { defineComponent } from "vue";
-interface EventPayload {
-  name: string;
-  description: string;
-  image_url: string;
-  society: string;
-  location: string;
-  date_time: string;
-  ticket_price: number;
-  latitude: number;
-  longitude: number;
-  event_id: string;
-  objectID?: string;
-  tags: string[];
-}
+import { mapActions, mapGetters } from "vuex";
 
 export default defineComponent({
   name: "EventCard",
@@ -85,23 +103,47 @@ export default defineComponent({
     NButton,
     NIcon,
     FontAwesomeIcon,
+    NTooltip,
   },
   props: {
     data: {
       type: Object as () => EventPayload,
       required: true,
     },
+    individual: {
+      type: Boolean,
+      default: false,
+    },
   },
   data: function () {
     return {
       starred: localStorage.getItem(this.data.event_id) == "starred_drp18",
       society_id: "",
+      disableAttending: false,
     };
   },
 
+  computed: {
+    ...mapGetters(["AttendingEvents"]),
+    isAttending() {
+      return this.AttendingEvents.map((x: EventPayload) => x.event_id).includes(
+        this.data.event_id
+      );
+    },
+  },
   methods: {
+    ...mapActions(["attendEvent", "unattendEvent"]),
     prettyPrint(date: string) {
       return new Date(date).toLocaleString();
+    },
+    async updateAttending() {
+      this.disableAttending = true;
+      if (!this.isAttending) {
+        await this.attendEvent(this.data);
+      } else {
+        await this.unattendEvent(this.data);
+      }
+      this.disableAttending = false;
     },
     starEvent() {
       if (this.starred) {
@@ -142,7 +184,14 @@ a {
   right: 10px;
   top: 10px;
 }
-.fa-star {
+.event-attend {
+  font-size: 32px;
+  position: absolute;
+  left: 10px;
+  top: 10px;
+}
+.fa-star,
+.fa-person-running {
   box-shadow: rgb(255 255 255 / 27%) 0px 0px 20px 12px;
   background: rgb(255 255 255 / 27%);
 }

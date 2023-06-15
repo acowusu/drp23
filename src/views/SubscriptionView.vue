@@ -5,28 +5,21 @@
       Enter your email to subscribe to societies and recieve notifications about
       new events
     </p>
-    <div class="form">
-      <n-input
-        v-model:value="email"
-        @input="getList"
-        type="text"
-        placeholder="Basic Input"
-      />
-    </div>
+    {{ Email }}
 
     <ul class="results">
       <h3>Subscriptions</h3>
-      <li v-for="item in items" :key="item">
+      <li v-for="item in SubscribedSocieties" :key="item">
         {{ item.name }} <n-tag>{{ item.type }}</n-tag>
         <n-button size="tiny" @click="remove(item)">❌</n-button>
       </li>
     </ul>
     <h3>Available Societies</h3>
     <ul class="results">
-      <li v-for="item in societies" :key="item">
+      <li v-for="item in pageItems" :key="item.name">
         {{ item.name }} <n-tag>{{ item.type }}</n-tag>
         <n-button
-          v-if="subscribedNames.includes(item.name)"
+          v-if="subscribedNames.has(item.name)"
           size="tiny"
           @click="remove(item.name)"
           >❌</n-button
@@ -34,88 +27,82 @@
         <n-button v-else size="tiny" @click="add(item?.name)">✅</n-button>
       </li>
     </ul>
+    <n-pagination
+      v-model:page="page"
+      v-model:page-size="pageSize"
+      :page-count="totalPages"
+      show-size-picker
+      :page-sizes="pageSizes"
+    />
   </div>
 </template>
 
 <script lang="ts">
-import { NButton, NInput, NTag } from "naive-ui";
-
+import { SocietyPayload } from "@/types";
+import { NButton, NPagination, NTag } from "naive-ui";
 import { defineComponent } from "vue";
-interface Society {
-  name: string;
-  type: string;
-}
+import { mapActions, mapGetters } from "vuex";
+
 export default defineComponent({
   name: "SubscriptionView",
-  components: { NInput, NTag, NButton },
+  components: { NTag, NButton, NPagination },
   mounted() {
-    this.loadSocieties();
-    this.getList();
+    this.fetchSocieties();
+    this.fetchSubscriptions();
   },
   computed: {
-    subscribedNames(): string[] {
-      return this.items.map(({ name }) => name);
+    ...mapGetters(["Email", "Societies", "SubscribedSocieties"]),
+    pageItems(): SocietyPayload[] {
+      return this.Societies.slice(
+        (this.page - 1) * this.pageSize,
+        this.page * this.pageSize
+      );
+    },
+    totalPages(): number {
+      return Math.ceil(this.Societies.length / this.pageSize);
+    },
+    subscribedNames(): Set<string> {
+      return new Set(
+        this.SubscribedSocieties.map(({ name }: SocietyPayload) => name)
+      );
     },
   },
   methods: {
+    ...mapActions(["fetchSocieties", "fetchSubscriptions"]),
     onPageChange() {
       window.scrollTo(0, 0);
     },
-    async loadSocieties() {
-      const options = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      };
-
-      await fetch("/api/society", options)
-        .then((response) => response.json())
-        .then((response) => (this.societies = response))
-        .catch((err) => console.error(err));
-    },
-    async getList() {
-      const options = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: this.email }),
-      };
-
-      await fetch("/api/subscriptions", options)
-        .then((response) => response.json())
-        .then((response) => (this.items = response))
-        .catch((err) => console.error(err));
-    },
-
     async remove(society: string) {
       const options = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: this.email, society, subscribe: false }),
+        body: JSON.stringify({ email: this.Email, society, subscribe: false }),
       };
 
       await fetch("/api/subscriptions", options).catch((err) =>
         console.error(err)
       );
-      await this.getList();
+      await this.fetchSubscriptions();
     },
     async add(society: string) {
       const options = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: this.email, society, subscribe: true }),
+        body: JSON.stringify({ email: this.Email, society, subscribe: true }),
       };
 
       await fetch("/api/subscriptions", options).catch((err) =>
         console.error(err)
       );
-      await this.getList();
+      await this.fetchSubscriptions();
     },
   },
   data() {
     console.log(process.env);
     return {
-      items: [] as Society[],
-      email: "ao921@ic.ac.uk",
-      societies: [] as Society[],
+      page: 1,
+      pageSize: 10,
+      pageSizes: [10, 20, 30, 50],
     };
   },
 });

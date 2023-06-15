@@ -1,58 +1,56 @@
 <template>
-  <div class="home">
-    <ais-instant-search :search-client="searchClient" :index-name="searchIndex">
-      <section class="form-search">
-        <ais-search-box />
-        <n-collapse>
-          <n-collapse-item title="Filter" name="4">
-            <h3>Date</h3>
-            <ais-range-input attribute="timestamp">
-              <template
-                v-slot="{ currentRefinement, range, canRefine, refine }"
-              >
-                <TimestampRangePicker
-                  :disabled="!canRefine"
-                  :start="currentRefinement.min"
-                  :end="currentRefinement.max"
-                  :min="range.min"
-                  :max="range.max"
-                  @change="refine"
-                />
-              </template>
-            </ais-range-input>
-
-            <h3>Price</h3>
-            <ais-range-input attribute="ticket_price" />
-
-            <h3>Tags</h3>
-            <ais-refinement-list attribute="tags"> </ais-refinement-list>
-
-            <h3>Organizers</h3>
-            <ais-refinement-list attribute="society"> </ais-refinement-list>
-            <h3>Clear</h3>
-            <AisClearRefinements></AisClearRefinements>
-          </n-collapse-item>
-        </n-collapse>
-      </section>
-      <section class="algolia">
-        <ais-hits>
-          <template v-slot="{ items }">
-            <div class="results">
-              <EventCard
-                v-for="item in items"
-                :key="item.objectID"
-                :data="addEventID(item)"
+  <ais-instant-search
+    :search-client="searchClient"
+    :index-name="searchIndex"
+    class="home"
+  >
+    <section class="form-search">
+      <ais-search-box />
+      <n-collapse>
+        <n-collapse-item title="Filter" name="4">
+          <h3>Date</h3>
+          <ais-range-input attribute="timestamp">
+            <template v-slot="{ currentRefinement, canRefine, refine }">
+              <TimestampRangePicker
+                :disabled="!canRefine"
+                :start="currentRefinement.min"
+                :end="currentRefinement.max"
+                @change="refine"
               />
-            </div>
-          </template>
-        </ais-hits>
-      </section>
-      <section class="foot">
-        <ais-pagination class="pagination" v-on:page-change="onPageChange" />
-        <ais-stats />
-      </section>
-    </ais-instant-search>
-  </div>
+            </template>
+          </ais-range-input>
+
+          <h3>Price</h3>
+          <ais-range-input attribute="ticket_price" />
+
+          <h3>Tags</h3>
+          <ais-refinement-list attribute="tags"> </ais-refinement-list>
+
+          <h3>Organizers</h3>
+          <ais-refinement-list attribute="society"> </ais-refinement-list>
+          <h3>Clear</h3>
+          <AisClearRefinements></AisClearRefinements>
+        </n-collapse-item>
+      </n-collapse>
+    </section>
+    <section class="algolia">
+      <ais-hits>
+        <template v-slot="{ items }">
+          <div class="results">
+            <EventCard
+              v-for="item in items"
+              :key="item.objectID"
+              :data="addEventID(item)"
+            />
+          </div>
+        </template>
+      </ais-hits>
+    </section>
+    <section class="foot">
+      <ais-pagination class="pagination" v-on:page-change="onPageChange" />
+      <ais-stats />
+    </section>
+  </ais-instant-search>
 </template>
 
 <script lang="ts">
@@ -173,6 +171,7 @@ export default defineComponent({
 }
 .form-search {
   max-width: 800px;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
   display: flex;
