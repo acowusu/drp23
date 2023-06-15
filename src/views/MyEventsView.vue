@@ -29,7 +29,7 @@ export default defineComponent({
 
       if (localStorage.getItem(event_id) == "starred_drp18") {
         reqs.push(
-          fetch("/api/event", options)
+          fetch("/api/events", options)
             .then((response) => response.json())
             .then((response) => this.items.push(response))
         );

@@ -13,7 +13,8 @@
           </n-collapse-item>
           <n-collapse-item title="Filter Tags" name="2">
             <h3>Tags</h3>
-            <ais-refinement-list attribute="tags"> </ais-refinement-list>
+            <ais-refinement-list attribute="tags" operator="and">
+            </ais-refinement-list>
           </n-collapse-item>
           <n-collapse-item title="Filter Organizer" name="3">
             <h3>Organizers</h3>

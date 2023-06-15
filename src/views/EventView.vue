@@ -22,7 +22,7 @@ export default defineComponent({
       body: JSON.stringify({ event_id: this.$route.params.event_id }),
     };
 
-    await fetch("/api/event", options)
+    await fetch("/api/events", options)
       .then((response) => response.json())
       .then((response) => (this.item = response))
       .catch((err) => console.error(err));
