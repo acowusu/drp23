@@ -1,21 +1,16 @@
 module.exports = class {
-  constructor({ db, email }) {
+  constructor({ db, email, userManager}) {
     this.db = db;
+    this.userManager = userManager
     this.email = email;
   }
 
   async subscribe({ email, society }) {
+    console.log(society)
     const client = await this.db.getClient();
     try {
+      const user_id = await this.userManager.getOrCreate({ email: email})
       await client.query("BEGIN");
-      const user_result = await client.query(
-        /*sql */ `
-        SELECT user_id
-        FROM users
-        WHERE email = $1`,
-        [email]
-      );
-      const user_id = user_result.rows[0].user_id;
       const society_result = await client.query(
         /*sql */ `
         SELECT society_id
@@ -41,6 +36,7 @@ module.exports = class {
   }
   async unsubscribe({ email, society }) {
     const client = await this.db.getClient();
+    console.log(society);
     try {
       await client.query("BEGIN");
       const user_result = await client.query(

@@ -18,7 +18,7 @@
       <h3>Subscriptions</h3>
       <li v-for="item in items" :key="item">
         {{ item.name }} <n-tag>{{ item.type }}</n-tag>
-        <n-button size="tiny" @click="remove(item)">❌</n-button>
+        <n-button size="tiny" @click="remove(item.name)">❌</n-button>
       </li>
     </ul>
     <h3>Available Societies</h3>

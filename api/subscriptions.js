@@ -1,8 +1,11 @@
 const Database = require("./_db");
 const db = new Database();
 
+const UserManager = require("./_userManager");
+const userManager = new UserManager({ db })
+
 const SubscriptionManager = require("./_subscriptionManager");
-const subscriptionManager = new SubscriptionManager({ db });
+const subscriptionManager = new SubscriptionManager({ db, userManager });
 
 module.exports = async (req, res) => {
   const {
@@ -10,9 +13,11 @@ module.exports = async (req, res) => {
   } = req;
 
   if (!email) {
-    res.status(400).json({
-      error: "Need an email",
-    });
+    // res.status(400).json({
+    //   error: "Need an email",
+    // });
+    res.json(); 
+    return;
   }
   if (subscribe === true) {
     res.json(await subscriptionManager.subscribe({ email, society }));
