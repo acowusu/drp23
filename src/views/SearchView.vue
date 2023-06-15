@@ -25,7 +25,8 @@
             <ais-range-input attribute="ticket_price" />
 
             <h3>Tags</h3>
-            <ais-refinement-list attribute="tags" operator="and"> </ais-refinement-list>
+            <ais-refinement-list attribute="tags" operator="and">
+            </ais-refinement-list>
             <h3>Organizers</h3>
             <ais-refinement-list attribute="society"> </ais-refinement-list>
             <h3>Clear</h3>

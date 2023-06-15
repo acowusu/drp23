@@ -29,9 +29,14 @@
       </n-icon>
     </n-button>
     <n-divider />
-    <n-ellipsis expand-trigger="click" line-clamp="2" :tooltip="false">
-      {{ data.description }}
-    </n-ellipsis>
+    <div v-if="!expanded" @click="expand">
+      <div class="container" ref="container">
+        <div v-html="markdownToHtml"></div>
+      </div>
+      <p v-if="overflown" style="cursor: pointer">[click to expand]</p>
+    </div>
+    <div v-else @click="expand" v-html="markdownToHtml" class="expanded"></div>
+
     <n-divider />
 
     <em></em>
@@ -73,7 +78,8 @@ interface EventPayload {
   objectID?: string;
   tags: string[];
 }
-
+import { marked } from "marked";
+import exp from "constants";
 export default defineComponent({
   name: "EventCard",
   components: {
@@ -81,7 +87,6 @@ export default defineComponent({
     NTag,
     NSpace,
     NDivider,
-    NEllipsis,
     NButton,
     NIcon,
     FontAwesomeIcon,
@@ -92,13 +97,17 @@ export default defineComponent({
       required: true,
     },
   },
+  mounted(): void {
+    this.overflown = this.checkOverflow();
+  },
   data: function () {
     return {
       starred: localStorage.getItem(this.data.event_id) == "starred_drp18",
       society_id: "",
+      expanded: false,
+      overflown: false,
     };
   },
-
   methods: {
     prettyPrint(date: string) {
       return new Date(date).toLocaleString();
@@ -111,6 +120,23 @@ export default defineComponent({
         localStorage.setItem(this.data.event_id, "starred_drp18");
         this.starred = true;
       }
+    },
+    expand() {
+      this.expanded = !this.expanded;
+    },
+    checkOverflow() {
+      const container = this.$refs.container as HTMLElement | undefined;
+      if (!container) {
+        return false;
+      } else {
+        return container.scrollHeight != container.clientHeight;
+      }
+    },
+  },
+  computed: {
+    markdownToHtml() {
+      console.log(marked(this.data.description));
+      return marked(this.data.description);
     },
   },
 });
@@ -145,5 +171,16 @@ a {
 .fa-star {
   box-shadow: rgb(255 255 255 / 27%) 0px 0px 20px 12px;
   background: rgb(255 255 255 / 27%);
+}
+
+.container {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 100px;
+  cursor: pointer;
+}
+
+.expanded {
+  cursor: pointer;
 }
 </style>
