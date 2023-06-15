@@ -5,11 +5,21 @@
         <ais-search-box />
         <n-collapse>
           <n-collapse-item title="Filter" name="4">
-            <n-date-picker
-              type="datetimerange"
-              clearable
-              default-time="13:22:11"
-            />
+            <h3>Date</h3>
+            <ais-range-input attribute="timestamp">
+              <template
+                v-slot="{ currentRefinement, range, canRefine, refine }"
+              >
+                <TimestampRangePicker
+                  :disabled="!canRefine"
+                  :start="currentRefinement.min"
+                  :end="currentRefinement.max"
+                  :min="range.min"
+                  :max="range.max"
+                  @change="refine"
+                />
+              </template>
+            </ais-range-input>
 
             <h3>Price</h3>
             <ais-range-input attribute="ticket_price" />
@@ -47,6 +57,7 @@
 
 <script lang="ts">
 import EventCard from "@/components/EventCard.vue"; // @ is an alias to /src
+import TimestampRangePicker from "@/components/TimestampRangePicker.vue";
 const {
   AisInstantSearch,
   AisSearchBox,
@@ -61,12 +72,7 @@ const {
 
 import algoliasearch from "algoliasearch/lite";
 import "instantsearch.css/themes/satellite-min.css";
-import {
-  AutoCompleteInst,
-  NCollapse,
-  NCollapseItem,
-  NDatePicker,
-} from "naive-ui";
+import { AutoCompleteInst, NCollapse, NCollapseItem } from "naive-ui";
 import { computed, defineComponent, nextTick, ref, watch } from "vue";
 const searchable_app_id = process.env.VUE_APP_searchable_app_id;
 const searchable_read_key = process.env.VUE_APP_searchable_read_key;
@@ -77,7 +83,6 @@ export default defineComponent({
   name: "SearchView",
   components: {
     EventCard,
-    NDatePicker,
     AisInstantSearch,
     AisSearchBox,
     AisHits,
@@ -88,6 +93,7 @@ export default defineComponent({
     NCollapse,
     NCollapseItem,
     AisClearRefinements,
+    TimestampRangePicker,
   },
   setup() {
     const autoCompleteInstRef = ref<AutoCompleteInst | null>(null);
