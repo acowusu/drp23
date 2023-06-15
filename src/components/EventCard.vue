@@ -37,7 +37,9 @@
     <em></em>
     {{ data.location }} - {{ prettyPrint(data.date_time) }}:
     <n-space>
-      <n-tag v-for="tag in data.tags" :key="tag">{{ tag }}</n-tag>
+      <n-tag @click="updateSelected(tag)" v-for="tag in data.tags" :key="tag">{{
+        tag
+      }}</n-tag>
     </n-space>
     <template #footer>
       <router-link :to="`/event/${data?.event_id || data?.objectID}`">
@@ -72,6 +74,7 @@ interface EventPayload {
   event_id: string;
   objectID?: string;
   tags: string[];
+  selectedTags?: string[];
 }
 
 export default defineComponent({
@@ -111,6 +114,9 @@ export default defineComponent({
         localStorage.setItem(this.data.event_id, "starred_drp18");
         this.starred = true;
       }
+    },
+    updateSelected(tag: string) {
+      this.$emit("updateSelected", tag);
     },
   },
 });
