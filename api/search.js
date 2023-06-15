@@ -8,8 +8,8 @@ module.exports = async (req, res) => {
   const {
     body: { startAt, endAt, society, tags },
   } = req;
-
+  console.log(startAt, endAt, society, tags);
   res.json({
-    results: query.search({ startAt, endAt, society, tags }),
+    results: await query.search({ startAt, endAt, society, tags }),
   });
 };
