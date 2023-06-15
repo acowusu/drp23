@@ -43,9 +43,6 @@
             />
           </n-gi>
           <n-gi>
-            <n-checkbox value="Free" label="Free" />
-          </n-gi>
-          <n-gi>
             <n-checkbox value="Free food" label="Free food" />
           </n-gi>
           <n-gi>

@@ -12,23 +12,11 @@ DELETE FROM users WHERE 1=1;
 
 -- Inserting data into the tags table
 INSERT INTO tags (tag_id, tag_name) VALUES
-    ('ffffffff-ffff-ffff-ffff-fffffffffff1','Music'),
-    ('ffffffff-ffff-ffff-ffff-fffffffffff2','Sports'),
-    ('ffffffff-ffff-ffff-ffff-fffffffffff3','Art'),
-    ('ffffffff-ffff-ffff-ffff-fffffffffff4','Food'),
-    ('ffffffff-ffff-ffff-ffff-fffffffffff5','Technology'),
-    ('ffffffff-ffff-ffff-ffff-fffffffffff6' ,'Academic Related'),
-    ('ffffffff-ffff-ffff-ffff-fffffffffff7' ,'Arts & Entertainment'),
-    ('ffffffff-ffff-ffff-ffff-fffffffffff8' ,'Charitable'),
-    ('ffffffff-ffff-ffff-ffff-fffffffffff9' ,'Cultural'),
-    ('ffffffff-ffff-ffff-ffff-ffffffffff10' ,'Departmental'),
-    ('ffffffff-ffff-ffff-ffff-ffffffffff11' ,'Faith'),
-    ('ffffffff-ffff-ffff-ffff-ffffffffff12' ,'Indoor'),
-    ('ffffffff-ffff-ffff-ffff-ffffffffff13' ,'Martial Arts'),
-    ('ffffffff-ffff-ffff-ffff-ffffffffff14' ,'Media'),
-    ('ffffffff-ffff-ffff-ffff-ffffffffff15' ,'Outdoor'),
-    ('ffffffff-ffff-ffff-ffff-ffffffffff16' ,'Social'),
-    ('ffffffff-ffff-ffff-ffff-ffffffffff17' ,'Sports');
+    ('ffffffff-ffff-ffff-ffff-fffffffffff1','No membership required'),
+    ('ffffffff-ffff-ffff-ffff-fffffffffff2','Free snacks'),
+    ('ffffffff-ffff-ffff-ffff-fffffffffff3','Alcohol free'),
+    ('ffffffff-ffff-ffff-ffff-fffffffffff4','Free food'),
+    ('ffffffff-ffff-ffff-ffff-fffffffffff5','Free drinks');
 
 -- Inserting data into the events table
 INSERT INTO events (event_id, name, description, image_url, society, location, date_time, ticket_price, latitude, longitude) VALUES
@@ -41,10 +29,16 @@ INSERT INTO events (event_id, name, description, image_url, society, location, d
 -- Inserting data into the eventTags table
 INSERT INTO eventTags (event_id, tag_id) VALUES
     ('ffffffff-ffff-ffff-ffff-fffffffffff1', 'ffffffff-ffff-ffff-ffff-fffffffffff1'),
+    ('ffffffff-ffff-ffff-ffff-fffffffffff1', 'ffffffff-ffff-ffff-ffff-fffffffffff2'),
+    ('ffffffff-ffff-ffff-ffff-fffffffffff1', 'ffffffff-ffff-ffff-ffff-fffffffffff3'),
     ('ffffffff-ffff-ffff-ffff-fffffffffff2', 'ffffffff-ffff-ffff-ffff-fffffffffff2'),
-    ('ffffffff-ffff-ffff-ffff-fffffffffff3', 'ffffffff-ffff-ffff-ffff-fffffffffff3'),
+    ('ffffffff-ffff-ffff-ffff-fffffffffff2', 'ffffffff-ffff-ffff-ffff-fffffffffff3'),
+    ('ffffffff-ffff-ffff-ffff-fffffffffff3', 'ffffffff-ffff-ffff-ffff-fffffffffff1'),
+    ('ffffffff-ffff-ffff-ffff-fffffffffff3', 'ffffffff-ffff-ffff-ffff-fffffffffff5'),
+    ('ffffffff-ffff-ffff-ffff-fffffffffff4', 'ffffffff-ffff-ffff-ffff-fffffffffff1'),
+    ('ffffffff-ffff-ffff-ffff-fffffffffff4', 'ffffffff-ffff-ffff-ffff-fffffffffff3'),
     ('ffffffff-ffff-ffff-ffff-fffffffffff4', 'ffffffff-ffff-ffff-ffff-fffffffffff4'),
-    ('ffffffff-ffff-ffff-ffff-fffffffffff5', 'ffffffff-ffff-ffff-ffff-fffffffffff5');
+    ('ffffffff-ffff-ffff-ffff-fffffffffff5', 'ffffffff-ffff-ffff-ffff-fffffffffff1');
 
 INSERT INTO society (name, type) VALUES
     ('93% Club Imperial', 'Charitable')      ,
