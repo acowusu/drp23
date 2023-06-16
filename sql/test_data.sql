@@ -2,6 +2,7 @@ BEGIN;
 -- Clear the old data
 DELETE FROM eventTags WHERE 1=1;
 DELETE FROM tags WHERE 1=1;
+DELETE FROM attending WHERE 1=1;
 DELETE FROM events WHERE 1=1;
 DELETE FROM subscription WHERE 1=1;
 DELETE FROM society WHERE 1=1;

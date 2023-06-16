@@ -18,7 +18,8 @@ const event = require("./_event.js");
 const attend = require("./_attend.js");
 const updateSociety = require("./_updateSociety.js");
 const scrapeUnion = require("./_scrapeUnion.js");
-
+const messages = require("./_messages.js");
+const attending = require("./_attending.js");
 app.post("/api/subscriptions", subscriptions);
 app.post("/api/society", society);
 app.post("/api/user", user);
@@ -34,4 +35,6 @@ app.post("/api/event", event);
 app.post("/api/attend", attend);
 app.post("/api/update_society", updateSociety);
 app.post("/api/scrape_union", scrapeUnion);
+app.post("/api/messages", messages);
+app.post("/api/attending", attending);
 module.exports = app;

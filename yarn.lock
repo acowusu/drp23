@@ -4494,7 +4494,7 @@ find-up@^4.0.0, find-up@^4.1.0:
 
 firebase@^9.22.2:
   version "9.22.2"
-  resolved "https://registry.npmjs.org/firebase/-/firebase-9.22.2.tgz"
+  resolved "https://registry.yarnpkg.com/firebase/-/firebase-9.22.2.tgz#8619bbdf38ab691d6b14da5d863370ab2c7ab6e5"
   integrity sha512-eBXsaTzXPx3Y0QhuuluG/qR58tlOx2X/W0GKNoF004FcG9L2gHuvGu5/bIczvrPyfNOCqDF+I5I/kOQi8l9m0A==
   dependencies:
     "@firebase/analytics" "0.10.0"
@@ -8013,6 +8013,11 @@ vue-demi@^0.11.4:
   resolved "https://registry.npmjs.org/vue-demi/-/vue-demi-0.11.4.tgz"
   integrity sha512-/3xFwzSykLW2HiiLie43a+FFgNOcokbBJ+fzvFXd0r2T8MYohqvphUyDQ8lbAwzQ3Dlcrb1c9ykifGkhSIAk6A==
 
+vue-demi@latest:
+  version "0.14.5"
+  resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.14.5.tgz#676d0463d1a1266d5ab5cba932e043d8f5f2fbd9"
+  integrity sha512-o9NUVpl/YlsGJ7t+xuqJKx8EBGf1quRhCiT6D/J0pfwmk9zUwYkC7yrF4SZCe6fETvSM3UNL2edcbYrSyc4QHA==
+
 vue-eslint-parser@^8.0.0, vue-eslint-parser@^8.0.1:
   version "8.3.0"
   resolved "https://registry.npmmirror.com/vue-eslint-parser/-/vue-eslint-parser-8.3.0.tgz"
@@ -8101,6 +8106,13 @@ vue@^3.2.13, vue@^3.2.25:
     "@vue/runtime-dom" "3.3.4"
     "@vue/server-renderer" "3.3.4"
     "@vue/shared" "3.3.4"
+
+vuefire@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/vuefire/-/vuefire-3.1.0.tgz#4da1478d1e6cdf0951612614056c8b3b51625581"
+  integrity sha512-iLY6GARr5la75tfxBZUm2zfbL6kQ11FWBUHClyfM602xgWskkBAIareGs3R4K2DC4QSWXslrYnteCyLlqouD8w==
+  dependencies:
+    vue-demi latest
 
 vueuc@^0.4.51:
   version "0.4.51"

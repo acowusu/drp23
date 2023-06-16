@@ -4,8 +4,10 @@ const SubscriptionManager = require("./_subscriptionManager");
 const Email = require("./_email");
 const email = new Email();
 const subscriptionManager = new SubscriptionManager({ db, email });
+const MessageManager = require("./_messageManager");
+const messageManager = new MessageManager();
 const EventMaker = require("./_eventMaker");
-const Maker = new EventMaker({ db, subscriptionManager });
+const Maker = new EventMaker({ db, subscriptionManager, messageManager });
 
 module.exports = async (req, res) => {
   const {

@@ -17,7 +17,8 @@ export default defineComponent({
       <router-link to="/">Browse Events</router-link> |
       <router-link to="/myevents">My Events</router-link> |
       <router-link to="/societyhomepage">Edit Society</router-link>|
-      <router-link to="/account">Account</router-link>
+      <router-link to="/account">Account</router-link> |
+      <router-link to="/messages">Announcements</router-link>
     </nav>
     <router-view />
   </n-message-provider>

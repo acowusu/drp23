@@ -59,6 +59,19 @@
               Create Event
             </router-link>
           </n-tab-pane>
+          <n-tab-pane name="Manage Events">
+            <n-select
+              :options="eventOptions"
+              :show-arrow="true"
+              filterable
+              @update-value="handleChooseEvent"
+            />
+            <ManageEvent
+              can-send
+              :event="chosenEvent"
+              v-if="chosenEvent?.event_id"
+            />
+          </n-tab-pane>
         </n-tabs>
       </n-card>
     </div>
@@ -67,7 +80,8 @@
 </template>
 
 <script lang="ts">
-import { SocietyPayload } from "@/types";
+import ManageEvent from "@/components/ManageEvent.vue";
+import { EventPayload, SocietyPayload } from "@/types";
 import {
   NButton,
   NCard,
@@ -90,6 +104,7 @@ export default defineComponent({
     NTabs,
     NButton,
     NTabPane,
+    ManageEvent,
   },
   data: function () {
     return {
@@ -101,10 +116,12 @@ export default defineComponent({
       selected: false,
       chosenSociety: "",
       societyID: "",
+      events: [] as EventPayload[],
+      chosenEvent: {} as EventPayload,
     };
   },
-  async mounted() {
-    this.options = await this.getSocs();
+  async created() {
+    await this.fetchSocieties();
   },
   computed: {
     ...mapGetters(["ManagingSociety", "Societies"]),
@@ -114,11 +131,27 @@ export default defineComponent({
         value: JSON.stringify(society),
       }));
     },
+    eventOptions(): { label: string; value: string }[] {
+      return this.events.map((event: any) => ({
+        label: event.name,
+        value: JSON.stringify(event),
+      }));
+    },
+  },
+  watch: {
+    ManagingSociety: {
+      handler: function () {
+        this.loadEvents();
+      },
+      deep: false,
+    },
   },
   methods: {
-    ...mapActions(["manageSociety"]),
+    ...mapActions(["manageSociety", "fetchSocieties"]),
     async handleSelect(option: any) {
+      console.log(option);
       option = JSON.parse(option);
+      this.manageSociety(option);
       this.selected = true;
       this.chosenSociety = option.name;
       this.description = option.description;
@@ -126,22 +159,29 @@ export default defineComponent({
       this.links.Whatsapp = option?.metadata?.Whatsapp || "";
       this.societyID = option.society_id;
     },
-    async getSocs() {
-      console.log("Here");
+    handleChooseEvent(option: any) {
+      console.log(option);
+      option = JSON.parse(option);
+      this.chosenEvent = option;
+    },
+    async loadEvents() {
+      const content = {
+        name: this.ManagingSociety.name,
+      };
+      console.log(content);
       const options = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(content),
       };
-      console.log("Here2");
-      return await fetch("/api/society", options)
+      const society = await fetch("api/events", options)
         .then((response) => response.json())
-        .then((response) =>
-          response.map((society: any) => ({
-            label: society.name,
-            value: JSON.stringify(society),
-          }))
-        )
+        .then((data) => {
+          console.log(data);
+          this.events = data;
+        })
         .catch((err) => console.error(err));
+      return;
     },
     async loadUnion() {
       const content = {
@@ -162,7 +202,7 @@ export default defineComponent({
                 `<p>${name} - ${role}</p>`
             )
             .join("")}
-           
+
             `;
           console.log(teamList);
           this.description = `

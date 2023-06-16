@@ -1,12 +1,14 @@
 import { initializeApp } from "firebase/app";
+import { getDatabase } from "firebase/database";
 
-const fbapp = initializeApp({
-  apiKey: "AIzaSyAZ-4dltXCdUP-8xOdkZ9NZ12Qpk96iMQg",
-  authDomain: "drp18-4ef46.firebaseapp.com",
-  projectId: "drp18-4ef46",
-  storageBucket: "drp18-4ef46.appspot.com",
-  messagingSenderId: "21161325016",
-  appId: "1:21161325016:web:5107d6d36b44204e3c82ad",
+export const firebase = initializeApp({
+  apiKey: "AIzaSyCwSRr8y3HEptv4-tFnDD8ugvPWt3xGIO0",
+  authDomain: "drp-whatson.firebaseapp.com",
+  projectId: "drp-whatson",
+  storageBucket: "drp-whatson.appspot.com",
+  messagingSenderId: "895329265943",
+  appId: "1:895329265943:web:9380102105051f6c186f52",
+  databaseURL:
+    "https://drp-whatson-default-rtdb.europe-west1.firebasedatabase.app",
 });
-
-export default fbapp;
+export const db = getDatabase(firebase);

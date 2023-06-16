@@ -1,7 +1,8 @@
 module.exports = class {
-  constructor({ db, subscriptionManager }) {
+  constructor({ db, subscriptionManager, messageManager }) {
     this.db = db;
     this.subscriptionManager = subscriptionManager;
+    this.messageManager = messageManager;
   }
 
   async create({
@@ -107,6 +108,9 @@ module.exports = class {
       longitude,
       tags,
     });
+    console.log("running fb");
+    await this.messageManager.init({ event_id: id });
+    console.log("fb done");
     return id;
   }
 };

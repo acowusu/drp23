@@ -81,7 +81,7 @@
 import {
   getDownloadURL,
   getStorage,
-  ref,
+  ref as sRef,
   uploadBytesResumable,
 } from "firebase/storage";
 import {
@@ -100,7 +100,7 @@ import {
   useMessage,
 } from "naive-ui";
 import { defineComponent } from "vue";
-import firebase from "../fb";
+import { firebase } from "../fb";
 const now = new Date();
 const nowstr =
   now.getFullYear() +
@@ -215,7 +215,7 @@ export default defineComponent({
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       const storage = getStorage(firebase);
-      const storageRef = ref(storage, random);
+      const storageRef = sRef(storage, random);
 
       const uploadTask = uploadBytesResumable(storageRef, file);
 

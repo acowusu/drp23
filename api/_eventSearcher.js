@@ -3,6 +3,34 @@ module.exports = class {
     this.db = db;
   }
 
+  eventsBySociety({ society }) {
+    return this.db
+      .getRows(
+        /*sql */ `
+      SELECT e.event_id,
+       e.name,
+       e.description,
+       e.image_url,
+       e.society,
+       e.location,
+       e.date_time,
+       e.ticket_price,
+       e.latitude,
+       e.longitude,
+       string_agg(t.tag_name, ';') AS tags
+      FROM events e
+      JOIN eventTags et ON e.event_id = et.event_id
+      JOIN tags t ON et.tag_id = t.tag_id
+      WHERE 
+       e.society = $1 `,
+        [society]
+      )
+      .then((row) => {
+        row.tags = row.tags.split(";");
+        console.log(row);
+        return row;
+      });
+  }
   searchWithSociety() {
     return this.db.getRows(
       /*sql */ `
