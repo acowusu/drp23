@@ -6,7 +6,7 @@ const societyManager = new SocietyManager({ db });
 
 module.exports = async (req, res) => {
   const {
-    body: { name, description, links },
+    body: { name, description, metadata },
   } = req;
-  res.json(await societyManager.update({ name, description, links }));
+  res.json(await societyManager.update({ name, description, metadata }));
 };

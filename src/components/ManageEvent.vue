@@ -60,11 +60,19 @@ watch(props.event, async ({ event_id }) => {
     <NButton @click="sendMessage">Send</NButton>
   </div>
   <ul>
-    <li v-for="message in messages" :key="message.id">
-      <n-alert type="info">
+    <li v-for="(message, index) in messages" :key="message.id">
+      <n-alert :type="index == 0 ? 'info' : ''">
         <span>{{ message.message }}</span>
         {{ new Date(message.timestamp).toLocaleString() }}
       </n-alert>
     </li>
   </ul>
 </template>
+<style scoped>
+ul {
+  list-style-type: none;
+}
+li {
+  margin: 10px;
+}
+</style>

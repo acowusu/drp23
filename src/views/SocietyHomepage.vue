@@ -34,10 +34,10 @@
                 <!-- <n-input v-model:value="description"></n-input> -->
               </n-form-item>
               <n-form-item label="Instagram">
-                <n-input v-model:value="links.Instagram"></n-input>
+                <n-input v-model:value="metadata.Instagram"></n-input>
               </n-form-item>
               <n-form-item label="WhatsApp">
-                <n-input v-model:value="links.Whatsapp"></n-input>
+                <n-input v-model:value="metadata.Whatsapp"></n-input>
               </n-form-item>
               <n-form-item>
                 <n-button type="primary" @click="pushEdit"> Save </n-button>
@@ -109,9 +109,10 @@ export default defineComponent({
   data: function () {
     return {
       description: "",
-      links: {
+      metadata: {
         Instagram: "",
         Whatsapp: "",
+        image: "",
       },
       selected: false,
       chosenSociety: "",
@@ -155,8 +156,8 @@ export default defineComponent({
       this.selected = true;
       this.chosenSociety = option.name;
       this.description = option.description;
-      this.links.Instagram = option?.metadata?.Instagram || "";
-      this.links.Whatsapp = option?.metadata?.Whatsapp || "";
+      this.metadata.Instagram = option?.metadata?.Instagram || "";
+      this.metadata.Whatsapp = option?.metadata?.Whatsapp || "";
       this.societyID = option.society_id;
     },
     handleChooseEvent(option: any) {
@@ -206,15 +207,19 @@ export default defineComponent({
             `;
           console.log(teamList);
           this.description = `
-          <img style="width: 100%;" src="https://www.imperialcollegeunion.org/${data.image}" />
+          <img  style="width: 100%;" src="https://www.imperialcollegeunion.org/${data.image}" />
           <p>${data.description}</p>
           <a href="
           ${data.constitutionLink}">Our Constitution</a>
           <h4>Our Team</h4>
           ${teamList}
           `;
-          this.links.Instagram = data.links.Instagram;
-          this.links.Whatsapp = data.links.Whatsapp;
+          if (data.metadata.Instagram)
+            this.metadata.Instagram = data.metadata.Instagram;
+          if (data.metadata.Whatsapp)
+            this.metadata.Whatsapp = data.metadata.Whatsapp;
+          if (data.image)
+            this.metadata.image = `https://www.imperialcollegeunion.org/${data.image}`;
         })
         .catch((err) => console.error(err));
     },
@@ -222,7 +227,7 @@ export default defineComponent({
       const content = {
         name: this.chosenSociety,
         description: this.description,
-        links: JSON.stringify(this.links),
+        metadata: JSON.stringify(this.metadata),
       };
       const options = {
         method: "POST",

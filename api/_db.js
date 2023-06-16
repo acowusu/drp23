@@ -2,7 +2,6 @@ if (process.env.NODE_ENV == "development") {
   console.log("running in dev mode");
 }
 require("dotenv").config();
-const fs = require("fs");
 const pg = require("pg");
 const algoliasearch = require("algoliasearch");
 const client = algoliasearch(
@@ -33,6 +32,10 @@ module.exports = class db {
   constructor() {
     this.pool = new Pool(config);
     this.dev = process.env.NODE_ENV == "development";
+    this.index = index;
+  }
+  getIndex() {
+    return this.index;
   }
   getClient() {
     return this.pool.connect();
@@ -91,30 +94,5 @@ module.exports = class db {
   addSearchable(data) {
     return index.saveObject(data);
   }
-  reset() {
-    const schema = fs.readFileSync(__dirname + "/../sql/schema.sql", {
-      encoding: "utf8",
-      flag: "r",
-    });
-    const test_data = fs.readFileSync(__dirname + "/../sql/test_data.sql", {
-      encoding: "utf8",
-      flag: "r",
-    });
-    const searchableData = fs.readFileSync(
-      __dirname + "/../algolia/baseData.json",
-      {
-        encoding: "utf8",
-        flag: "r",
-      }
-    );
 
-    return Promise.all([
-      this.execute(schema + "\n\n" + test_data).then(() => {
-        console.log("reset complete");
-      }),
-      index
-        .clearObjects()
-        .then(() => index.saveObjects(JSON.parse(searchableData), true)),
-    ]);
-  }
 };

@@ -16,8 +16,7 @@ module.exports = class {
        e.date_time,
        e.ticket_price,
        e.latitude,
-       e.longitude,
-       string_agg(t.tag_name, ';') AS tags
+       e.longitude
       FROM events e
       JOIN eventTags et ON e.event_id = et.event_id
       JOIN tags t ON et.tag_id = t.tag_id
@@ -26,7 +25,7 @@ module.exports = class {
         [society]
       )
       .then((row) => {
-        row.tags = row.tags.split(";");
+        // row.tags = row.tags.split(";");
         console.log(row);
         return row;
       });
@@ -165,6 +164,8 @@ module.exports = class {
       .then((rows) => {
         rows.forEach((row) => {
           row.tags = row.tags.split(";");
+          row.objectID = row.event_id;
+          row.timestamp = row.date_time.valueOf();
         });
         return rows;
       });

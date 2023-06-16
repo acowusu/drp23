@@ -37,11 +37,10 @@
       <ais-hits>
         <template v-slot="{ items }">
           <div class="results">
-            <EventCard
-              v-for="item in items"
-              :key="item.objectID"
-              :data="addEventID(item)"
-            />
+            <div v-for="item in items" :key="item.objectID" class="result">
+              <EventCard v-if="item.event_id" :data="item"></EventCard>
+              <SocietyCard v-else :data="item"></SocietyCard>
+            </div>
           </div>
         </template>
       </ais-hits>
@@ -55,6 +54,7 @@
 
 <script lang="ts">
 import EventCard from "@/components/EventCard.vue"; // @ is an alias to /src
+import SocietyCard from "@/components/SocietyCard.vue"; // @ is an alias to /src
 import TimestampRangePicker from "@/components/TimestampRangePicker.vue";
 const {
   AisInstantSearch,
@@ -81,6 +81,7 @@ export default defineComponent({
   name: "SearchView",
   components: {
     EventCard,
+    SocietyCard,
     AisInstantSearch,
     AisSearchBox,
     AisHits,
@@ -154,10 +155,17 @@ export default defineComponent({
   align-items: center;
 }
 .results {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 2fr;
+  grid-column-gap: 30px;
+  grid-row-gap: 30px;
+}
+.result > * {
+  width: 100%;
+  height: 100%;
 }
 .foot {
   display: flex;

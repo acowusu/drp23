@@ -5,7 +5,10 @@ export interface SocietyPayload {
   metadata: {
     Instagram: string;
     Whatsapp: string;
+    image?: string;
   };
+  society_id?: string;
+  objectID?: string;
 }
 export interface EventPayload {
   name: string;

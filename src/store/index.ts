@@ -1,29 +1,7 @@
 import { createStore } from "vuex";
 import VuexPersistence from "vuex-persist";
 
-interface EventPayload {
-  name: string;
-  description: string;
-  image_url: string;
-  society: string;
-  location: string;
-  date_time: string;
-  ticket_price: number;
-  latitude: number;
-  longitude: number;
-  event_id: string;
-  objectID?: string;
-  tags: string[];
-}
-interface SocietyPayload {
-  name: string;
-  description: string;
-  type: string;
-  metadata: {
-    Instagram: string;
-    Whatsapp: string;
-  };
-}
+import { EventPayload, SocietyPayload } from "@/types";
 
 export default createStore({
   state: {
@@ -57,6 +35,11 @@ export default createStore({
     },
     SubscribedSocieties(state) {
       return state.subscribedSocieties;
+    },
+    SubscribedIds(state) {
+      return new Set(
+        state.subscribedSocieties.map((society) => society.objectID)
+      );
     },
     ManagingSociety(state) {
       return state.managingSociety;
@@ -175,8 +158,40 @@ export default createStore({
         .then((response) => commit("setSubscribedSocieties", response))
         .catch((err) => console.error(err));
     },
-    manageSociety({ commit }, society) {
+    manageSociety({ commit, state }, society) {
       commit("setManagingSociety", society);
+    },
+    async unSubscribe({ dispatch, state }, society: string) {
+      const options = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: state.email,
+          society,
+          subscribe: false,
+        }),
+      };
+
+      await fetch("/api/subscriptions", options).catch((err) =>
+        console.error(err)
+      );
+      await dispatch("fetchSubscriptions");
+    },
+    async subscribe({ dispatch, state }, society: string) {
+      const options = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: state.email,
+          society,
+          subscribe: true,
+        }),
+      };
+
+      await fetch("/api/subscriptions", options).catch((err) =>
+        console.error(err)
+      );
+      await dispatch("fetchSubscriptions");
     },
   },
   modules: {},

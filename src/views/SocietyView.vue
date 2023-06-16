@@ -16,15 +16,22 @@
         </li>
       </ul>
     </div>
+    <div class="results">
+      <div v-for="item in items" :key="item.objectID" class="result">
+        <EventCard :data="item"></EventCard>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
+import EventCard from "@/components/EventCard.vue";
 import { NDivider } from "naive-ui";
 import { defineComponent } from "vue";
 export default defineComponent({
   components: {
     NDivider,
+    EventCard,
   },
   data: function () {
     return {
@@ -33,6 +40,7 @@ export default defineComponent({
       type: "",
       desc: "",
       links: new Map<string, string>([]),
+      items: [],
     };
   },
   async mounted() {
@@ -56,6 +64,13 @@ export default defineComponent({
     if (society.metadata) {
       this.links = new Map(Object.entries(society.metadata));
     }
+    await fetch("api/events", options)
+      .then((response) => response.json())
+      .then((items) => {
+        this.items = items;
+        console.log(items);
+      })
+      .catch((err) => console.error(err));
   },
 });
 </script>
@@ -81,5 +96,18 @@ export default defineComponent({
     max-height: 100%;
     object-fit: contain;
   }
+}
+.results {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 2fr;
+  grid-column-gap: 30px;
+  grid-row-gap: 30px;
+}
+.result > * {
+  width: 100%;
+  height: 100%;
 }
 </style>

@@ -4,9 +4,11 @@ module.exports = class {
   }
 
   getAll() {
-    return this.db.getRows(
-      /*sql */ `
+    return this.db
+      .getRows(
+        /*sql */ `
       SELECT 
+      s.society_id  ,
        s.name,
         s.type,
         s.description,
@@ -14,8 +16,15 @@ module.exports = class {
       FROM society s
       ORDER BY s.name ASC
 `,
-      []
-    );
+        []
+      )
+      .then((rows) =>
+        rows.map((society) => {
+          society.objectID = society.society_id;
+          society.tags = [society.type];
+          return society;
+        })
+      );
   }
   get({ name }) {
     return this.db.getRow(
@@ -41,15 +50,27 @@ module.exports = class {
       [name, type]
     );
   }
-  update({ name, description, links }) {
-    return this.db.getRow(
-      `
+  update({ name, description, metadata }) {
+    return this.db
+      .getRow(
+        `
       UPDATE society
       SET description = $1, metadata = $2
       WHERE name = $3
       RETURNING society_id, name, type, description, metadata
       `,
-      [description, links, name]
-    );
+        [description, metadata, name]
+      )
+      .then((society) => {
+        return this.db.getIndex().saveObject({
+          objectID: society.society_id,
+          society_id: society.society_id,
+          name: society.name,
+          type: society.type,
+          description: society.description,
+          metadata: society.metadata,
+          tags: [society.type],
+        });
+      });
   }
 };
