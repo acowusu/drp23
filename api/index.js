@@ -1,40 +1,38 @@
 const bodyParser = require("body-parser");
 const app = require("express")();
+const kv = require("@vercel/kv");
 app.use(bodyParser.json());
+const cache = function (req, res, next) {
+  if (req?.body?.cache) {
+    if (req.body) {
+      kv.get(JSON.stringify(req.body)).then((value) => {
+        if (value) {
+          res.json(value);
+        } else {
+          next();
+        }
+      });
+    } else {
+      next();
+    }
+  }
+  app.use(cache)
 
-const { v4 } = require("uuid");
-const subscriptions = require("./_subscriptions.js");
-const society = require("./_society.js");
-const user = require("./_user.js");
-const users = require("./_users.js");
-const tags = require("./_tags.js");
-const events = require("./_events.js");
-const createUser = require("./_createUser.js");
-const digest = require("./_digest.js");
-const create = require("./_create.js");
-const search = require("./_search.js");
-const reset = require("./_reset.js");
-const event = require("./_event.js");
-const attend = require("./_attend.js");
-const updateSociety = require("./_updateSociety.js");
-const scrapeUnion = require("./_scrapeUnion.js");
-const messages = require("./_messages.js");
-const attending = require("./_attending.js");
-app.post("/api/subscriptions", subscriptions);
-app.post("/api/society", society);
-app.post("/api/user", user);
-app.get("/api/users", users);
-app.post("/api/tags", tags);
-app.post("/api/events", events);
-app.post("/api/createUser", createUser);
-app.post("/api/digest", digest);
-app.post("/api/create", create);
-app.post("/api/search", search);
-app.post("/api/reset", reset);
-app.post("/api/event", event);
-app.post("/api/attend", attend);
-app.post("/api/update_society", updateSociety);
-app.post("/api/scrape_union", scrapeUnion);
-app.post("/api/messages", messages);
-app.post("/api/attending", attending);
-module.exports = app;
+  app.post("/api/subscriptions", require("./_subscriptions.js"));
+  app.post("/api/society", require("./_society.js"));
+  app.post("/api/user", require("./_user.js"));
+  app.get("/api/users", require("./_users.js"));
+  app.post("/api/tags", require("./_tags.js"));
+  app.post("/api/events", require("./_events.js"));
+  app.post("/api/createUser", require("./_createUser.js"));
+  app.post("/api/digest", require("./_digest.js"));
+  app.post("/api/create", require("./_create.js"));
+  app.post("/api/search", require("./_search.js"));
+  app.post("/api/reset", require("./_reset.js"));
+  app.post("/api/event", require("./_event.js"));
+  app.post("/api/attend", require("./_attend.js"));
+  app.post("/api/update_society", require("./_updateSociety.js"));
+  app.post("/api/scrape_union", require("./_scrapeUnion.js"));
+  app.post("/api/messages", require("./_messages.js"));
+  app.post("/api/attending", require("./_attending.js"));
+  module.exports = app;
