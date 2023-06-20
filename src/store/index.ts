@@ -161,7 +161,7 @@ export default createStore({
     manageSociety({ commit, state }, society) {
       commit("setManagingSociety", society);
     },
-    async unSubscribe({ dispatch, state }, society: string) {
+    async unSubscribe({ state, commit }, society: string) {
       const options = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -172,12 +172,12 @@ export default createStore({
         }),
       };
 
-      await fetch("/api/subscriptions", options).catch((err) =>
-        console.error(err)
-      );
-      await dispatch("fetchSubscriptions");
+      await fetch("/api/subscriptions", options)
+        .then((response) => response.json())
+        .then((response) => commit("setSubscribedSocieties", response))
+        .catch((err) => console.error(err));
     },
-    async subscribe({ dispatch, state }, society: string) {
+    async subscribe({ state, commit }, society: string) {
       const options = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -188,10 +188,10 @@ export default createStore({
         }),
       };
 
-      await fetch("/api/subscriptions", options).catch((err) =>
-        console.error(err)
-      );
-      await dispatch("fetchSubscriptions");
+      await fetch("/api/subscriptions", options)
+        .then((response) => response.json())
+        .then((response) => commit("setSubscribedSocieties", response))
+        .catch((err) => console.error(err));
     },
   },
   modules: {},

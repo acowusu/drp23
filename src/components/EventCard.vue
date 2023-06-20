@@ -18,16 +18,21 @@
     <n-tag rounded :bordered="false" type="error" v-else>
       £{{ data.ticket_price }}</n-tag
     >
-    <n-button text class="event-star" @click="starEvent" v-if="!starred">
-      <n-icon>
-        <font-awesome-icon icon="fa-regular fa-star" />
-      </n-icon>
-    </n-button>
-    <n-button text class="event-star" @click="starEvent" v-else
-      ><n-icon>
-        <font-awesome-icon icon="fa-solid fa-star" />
-      </n-icon>
-    </n-button>
+    <n-tooltip trigger="hover">
+      <template #trigger>
+        <n-button text class="event-star" @click="starEvent" v-if="!starred">
+          <n-icon>
+            <font-awesome-icon icon="fa-regular fa-star" />
+          </n-icon>
+        </n-button>
+        <n-button text class="event-star" @click="starEvent" v-else
+          ><n-icon>
+            <font-awesome-icon icon="fa-solid fa-star" />
+          </n-icon>
+        </n-button>
+      </template>
+      Save the event for later!
+    </n-tooltip>
     <n-tooltip trigger="hover">
       <template #trigger>
         <n-button
@@ -132,7 +137,7 @@ export default defineComponent({
     },
   },
   methods: {
-    ...mapActions(["attendEvent", "unattendEvent"]),
+    ...mapActions(["attendEvent", "unattendEvent", "saveEvent", "removeEvent"]),
     prettyPrint(date: string) {
       return new Date(date).toLocaleString();
     },
@@ -148,8 +153,10 @@ export default defineComponent({
     starEvent() {
       if (this.starred) {
         localStorage.removeItem(this.data.event_id);
+        this.removeEvent(this.data);
         this.starred = false;
       } else {
+        this.saveEvent(this.data);
         localStorage.setItem(this.data.event_id, "starred_drp18");
         this.starred = true;
       }

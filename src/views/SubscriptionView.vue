@@ -7,45 +7,78 @@
     </p>
     {{ Email }}
 
-    <ul class="results">
-      <h3>Subscriptions</h3>
-      <li v-for="item in SubscribedSocieties" :key="item">
-        {{ item.name }} <n-tag>{{ item.type }}</n-tag>
-        <n-button size="tiny" @click="remove(item)">❌</n-button>
-      </li>
-    </ul>
-    <h3>Available Societies</h3>
-    <ul class="results">
-      <li v-for="item in pageItems" :key="item.name">
-        {{ item.name }} <n-tag>{{ item.type }}</n-tag>
-        <n-button
+    <h3>Subscriptions</h3>
+    <div class="results">
+      <div v-for="item in SubscribedSocieties" :key="item.name">
+        <n-alert
+          :title="item.name"
           v-if="subscribedNames.has(item.name)"
-          size="tiny"
-          @click="remove(item.name)"
-          >❌</n-button
+          type="success"
+          closable
+          :on-close="handleUnsubscribe(item.name)"
         >
-        <n-button v-else size="tiny" @click="add(item?.name)">✅</n-button>
-      </li>
-    </ul>
+          {{ item.type }}
+          <!-- <n-button size="tiny" @click="unSubscribe(item.name)">❌</n-button> -->
+        </n-alert>
+      </div>
+    </div>
+    <h3>Available Societies</h3>
+    <div class="results">
+      <div v-for="item in pageItems" :key="item.name">
+        <n-alert
+          :title="item.name"
+          v-if="subscribedNames.has(item.name)"
+          type="success"
+        >
+          <div class="alert-split-content">
+            {{ item.type }}
+            <n-button
+              strong
+              secondary
+              round
+              type="error"
+              @click="unSubscribe(item.name)"
+            >
+              Unsubscribe
+            </n-button>
+          </div>
+        </n-alert>
+        <n-alert :title="item.name" v-else type="default">
+          <div class="alert-split-content">
+            {{ item.type }}
+            <n-button
+              strong
+              secondary
+              round
+              type="primary"
+              @click="subscribe(item.name)"
+            >
+              Subscribe
+            </n-button>
+          </div>
+        </n-alert>
+      </div>
+    </div>
     <n-pagination
       v-model:page="page"
       v-model:page-size="pageSize"
       :page-count="totalPages"
       show-size-picker
       :page-sizes="pageSizes"
+      class="pagination"
     />
   </div>
 </template>
 
 <script lang="ts">
 import { SocietyPayload } from "@/types";
-import { NButton, NPagination, NTag } from "naive-ui";
+import { NAlert, NButton, NPagination } from "naive-ui";
 import { defineComponent } from "vue";
 import { mapActions, mapGetters } from "vuex";
 
 export default defineComponent({
   name: "SubscriptionView",
-  components: { NTag, NButton, NPagination },
+  components: { NButton, NPagination, NAlert },
   mounted() {
     this.fetchSocieties();
     this.fetchSubscriptions();
@@ -68,33 +101,20 @@ export default defineComponent({
     },
   },
   methods: {
-    ...mapActions(["fetchSocieties", "fetchSubscriptions"]),
+    ...mapActions([
+      "fetchSocieties",
+      "fetchSubscriptions",
+      "subscribe",
+      "unSubscribe",
+    ]),
+    handleUnsubscribe(name: string) {
+      return async () => {
+        this.unSubscribe(name);
+        return true;
+      };
+    },
     onPageChange() {
       window.scrollTo(0, 0);
-    },
-    async remove(society: string) {
-      const options = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: this.Email, society, subscribe: false }),
-      };
-
-      await fetch("/api/subscriptions", options).catch((err) =>
-        console.error(err)
-      );
-      await this.fetchSubscriptions();
-    },
-    async add(society: string) {
-      const options = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: this.Email, society, subscribe: true }),
-      };
-
-      await fetch("/api/subscriptions", options).catch((err) =>
-        console.error(err)
-      );
-      await this.fetchSubscriptions();
     },
   },
   data() {
@@ -114,13 +134,15 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 1em;
 }
 .results {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-gap: 1rem;
+  width: 90%;
+  margin: 1rem;
+  padding: 1rem;
 }
 .foot {
   display: flex;
@@ -141,5 +163,10 @@ export default defineComponent({
     margin-bottom: 1rem;
   }
   padding: 1rem;
+}
+.alert-split-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 </style>

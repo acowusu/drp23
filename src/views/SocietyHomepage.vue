@@ -5,10 +5,11 @@
       :show-arrow="true"
       filterable
       @update-value="handleSelect"
+      :default-value="ManagingSociety.name"
     >
       <n-button>Society Selection</n-button>
     </n-select>
-    <div class="results" v-if="selected == true">
+    <div class="results" v-if="ManagingSociety.name">
       <n-card content-style="padding: 0;">
         <n-tabs
           type="line"
@@ -42,7 +43,7 @@
               <n-form-item>
                 <n-button type="primary" @click="pushEdit"> Save </n-button>
 
-                <router-link :to="{ path: `/society/${chosenSociety}` }">
+                <router-link :to="{ path: `/society/${ManagingSociety.name}` }">
                   <n-button type="primary">Society page </n-button>
                 </router-link>
               </n-form-item>
@@ -53,7 +54,7 @@
             <router-link
               :to="{
                 path: '/create',
-                query: { society: chosenSociety },
+                query: { society: ManagingSociety.name },
               }"
             >
               Create Event
@@ -108,6 +109,7 @@ export default defineComponent({
   },
   data: function () {
     return {
+      selectedSociety: null,
       description: "",
       metadata: {
         Instagram: "",
@@ -123,6 +125,7 @@ export default defineComponent({
   },
   async created() {
     await this.fetchSocieties();
+    this.assignFromManager();
   },
   computed: {
     ...mapGetters(["ManagingSociety", "Societies"]),
@@ -133,7 +136,7 @@ export default defineComponent({
       }));
     },
     eventOptions(): { label: string; value: string }[] {
-      return this.events.map((event: any) => ({
+      return this.events.map((event: { name: string }) => ({
         label: event.name,
         value: JSON.stringify(event),
       }));
@@ -145,25 +148,26 @@ export default defineComponent({
         this.loadEvents();
       },
       deep: false,
+      immediate: true,
     },
   },
   methods: {
     ...mapActions(["manageSociety", "fetchSocieties"]),
-    async handleSelect(option: any) {
-      console.log(option);
-      option = JSON.parse(option);
+    async handleSelect(val: string) {
+      console.log(val);
+      const option = JSON.parse(val);
       this.manageSociety(option);
-      this.selected = true;
-      this.chosenSociety = option.name;
-      this.description = option.description;
-      this.metadata.Instagram = option?.metadata?.Instagram || "";
-      this.metadata.Whatsapp = option?.metadata?.Whatsapp || "";
-      this.societyID = option.society_id;
+      this.assignFromManager();
     },
-    handleChooseEvent(option: any) {
+    assignFromManager() {
+      this.description = this.ManagingSociety.description;
+      this.metadata.Instagram = this.ManagingSociety.metadata.Instagram;
+      this.metadata.Whatsapp = this.ManagingSociety.metadata.Whatsapp;
+      this.societyID = this.ManagingSociety.society_id;
+    },
+    handleChooseEvent(option: string) {
       console.log(option);
-      option = JSON.parse(option);
-      this.chosenEvent = option;
+      this.chosenEvent = JSON.parse(option);
     },
     async loadEvents() {
       const content = {
@@ -175,7 +179,7 @@ export default defineComponent({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(content),
       };
-      const society = await fetch("api/events", options)
+      await fetch("api/events", options)
         .then((response) => response.json())
         .then((data) => {
           console.log(data);
@@ -186,7 +190,7 @@ export default defineComponent({
     },
     async loadUnion() {
       const content = {
-        name: this.chosenSociety,
+        name: this.ManagingSociety.name,
       };
       const options = {
         method: "POST",
@@ -225,7 +229,7 @@ export default defineComponent({
     },
     async pushEdit() {
       const content = {
-        name: this.chosenSociety,
+        name: this.ManagingSociety.name,
         description: this.description,
         metadata: JSON.stringify(this.metadata),
       };

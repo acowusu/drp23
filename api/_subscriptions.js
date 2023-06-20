@@ -15,10 +15,9 @@ module.exports = async (req, res) => {
     });
   }
   if (subscribe === true) {
-    res.json(await subscriptionManager.subscribe({ email, society }));
+    await subscriptionManager.subscribe({ email, society });
   } else if (subscribe === false) {
-    res.json(await subscriptionManager.unsubscribe({ email, society }));
-  } else {
-    res.json(await subscriptionManager.getAll({ email }));
+    await subscriptionManager.unsubscribe({ email, society });
   }
+  res.json(await subscriptionManager.getAll({ email }));
 };

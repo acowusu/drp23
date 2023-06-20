@@ -1,7 +1,14 @@
 <template>
   <div class="home">
     <div class="results">
-      <EventCard v-for="item in items" :key="item" :data="item" />
+      <EventCard v-for="item in SavedEvents" :key="item" :data="item" />
+      <NAlert
+        v-if="SavedEvents.length === 0"
+        type="info"
+        showIcon
+        title="No events
+      saved"
+      />
     </div>
   </div>
 </template>
@@ -9,35 +16,16 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import EventCard from "@/components/EventCard.vue"; // @ is an alias to /src
-
+import { mapGetters } from "vuex";
+import { NAlert } from "naive-ui";
 export default defineComponent({
   name: "MyEventsView",
   components: {
     EventCard,
+    NAlert,
   },
-  async mounted() {
-    let reqs = [];
-    for (let i = 0; i < localStorage.length; i++) {
-      const event_id = localStorage.key(i) ?? "null";
-      console.log(event_id);
-      const options = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ event_id }),
-      };
-      console.log(options);
-
-      if (localStorage.getItem(event_id) == "starred_drp18") {
-        reqs.push(
-          fetch("/api/event", options)
-            .then((response) => response.json())
-            .then((response) => this.items.push(response))
-        );
-      }
-    }
-    await Promise.all(reqs);
-    console.log(localStorage.length);
-    console.log(localStorage.key(0));
+  computed: {
+    ...mapGetters(["SavedEvents"]),
   },
   data() {
     return {

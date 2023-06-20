@@ -7,6 +7,13 @@
     </n-collapse> -->
     <div class="results">
       <EventCard v-for="item in items" :key="item" :data="item" />
+      <NAlert
+        v-if="items.length === 0"
+        type="info"
+        showIcon
+        title="No events
+      today"
+      />
     </div>
   </div>
 </template>
@@ -14,7 +21,7 @@
 <script lang="ts">
 import EventCard from "@/components/EventCard.vue"; // @ is an alias to /src
 // import EventMap from "@/components/EventMap.vue";
-// import { NCollapse, NCollapseItem } from "naive-ui";
+import { NAlert } from "naive-ui";
 import { defineComponent } from "vue";
 export default defineComponent({
   name: "TodayView",
@@ -23,6 +30,7 @@ export default defineComponent({
     // NCollapse,
     // NCollapseItem,
     // EventMap,
+    NAlert,
   },
   async mounted() {
     const options = {
