@@ -20,6 +20,7 @@ module.exports = class {
     const client = await this.db.getClient();
     let id;
     try {
+      const now = new Date();
       await client.query("BEGIN");
 
       const tagIds = await Promise.all(
@@ -40,7 +41,7 @@ module.exports = class {
           }
         })
       );
-
+      console.log(now - new Date());
       const insertResult = await client.query(
         `INSERT INTO events (name, description, image_url, society, location, date_time, ticket_price, latitude, longitude)
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING event_id`,
@@ -56,7 +57,7 @@ module.exports = class {
           longitude,
         ]
       );
-
+      console.log(now - new Date());
       const eventId = insertResult.rows[0].event_id;
       id = eventId;
       await Promise.all(
@@ -67,13 +68,13 @@ module.exports = class {
           );
         })
       );
-
+      console.log(now - new Date());
       await client.query("COMMIT");
 
       console.log("Event created successfully!");
       //  add to algolia
 
-      await this.db.addSearchable({
+      const searchable = this.db.addSearchable({
         objectID: eventId,
         name,
         description,
@@ -90,27 +91,30 @@ module.exports = class {
           lon: longitude,
         },
       });
+
+      const subs = this.subscriptionManager.notify({
+        name,
+        description,
+        image_url,
+        society,
+        location,
+        date_time,
+        ticket_price,
+        latitude,
+        longitude,
+        tags,
+      });
+      console.log("running fb");
+      const messages = this.messageManager.init({ event_id: id });
+      await Promise.all([subs, messages, searchable]);
+      console.log("fb done");
+      console.log(now - new Date());
+      return id;
     } catch (error) {
       await client.query("ROLLBACK");
       console.error("Error creating event:", error);
     } finally {
       client.release();
     }
-    await this.subscriptionManager.notify({
-      name,
-      description,
-      image_url,
-      society,
-      location,
-      date_time,
-      ticket_price,
-      latitude,
-      longitude,
-      tags,
-    });
-    console.log("running fb");
-    await this.messageManager.init({ event_id: id });
-    console.log("fb done");
-    return id;
   }
 };

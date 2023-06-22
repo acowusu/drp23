@@ -1,4 +1,6 @@
 const bodyParser = require("body-parser");
+require("isomorphic-fetch");
+
 const app = require("express")();
 app.use(bodyParser.json());
 
@@ -37,4 +39,7 @@ app.post("/api/update_society", updateSociety);
 app.post("/api/scrape_union", scrapeUnion);
 app.post("/api/messages", messages);
 app.post("/api/attending", attending);
+app.get("/api/", (req, res) => {
+  res.send("Hello World!");
+});
 module.exports = app;

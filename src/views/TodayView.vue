@@ -8,18 +8,20 @@
     <div class="results">
       <EventCard v-for="item in items" :key="item" :data="item" />
       <NAlert
-        v-if="items.length === 0"
+        v-if="items.length === 0 && !loading"
         type="info"
         showIcon
         title="No events
       today"
       />
+      <EventCardSkel v-if="loading" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import EventCard from "@/components/EventCard.vue"; // @ is an alias to /src
+import EventCardSkel from "@/components/EventCardSkel.vue";
 // import EventMap from "@/components/EventMap.vue";
 import { NAlert } from "naive-ui";
 import { defineComponent } from "vue";
@@ -31,6 +33,7 @@ export default defineComponent({
     // NCollapseItem,
     // EventMap,
     NAlert,
+    EventCardSkel,
   },
   async mounted() {
     const options = {
@@ -41,6 +44,7 @@ export default defineComponent({
     await fetch("/api/events", options)
       .then((response) => response.json())
       .then((response) => (this.items = response))
+      .then(() => (this.loading = false))
       .catch((err) => console.error(err));
   },
   methods: {
@@ -52,6 +56,7 @@ export default defineComponent({
     console.log(process.env);
     return {
       items: [],
+      loading: true,
     };
   },
 });

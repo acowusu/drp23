@@ -14,7 +14,7 @@ export default defineComponent({
     <nav>
       <router-link to="/today">Today's events</router-link> |
       <router-link to="/subscriptions">Subscriptions</router-link> |
-      <router-link to="/">Browse Events</router-link> |
+      <router-link to="/">Browse Events and Societies</router-link> |
       <router-link to="/myevents">My Events</router-link> |
       <router-link to="/societyhomepage">Edit Society</router-link>|
       <router-link to="/account">Account</router-link> |
