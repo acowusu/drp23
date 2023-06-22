@@ -51,14 +51,9 @@
           </n-tab-pane>
 
           <n-tab-pane name="Create Event">
-            <router-link
-              :to="{
-                path: '/create',
-                query: { society: ManagingSociety.name },
-              }"
-            >
-              Create Event
-            </router-link>
+            <br />
+            <CreateEvent :society="ManagingSociety.name" />
+            <br />
           </n-tab-pane>
           <n-tab-pane name="Manage Events">
             <n-select
@@ -81,6 +76,7 @@
 </template>
 
 <script lang="ts">
+import CreateEvent from "@/components/CreateEvent.vue";
 import ManageEvent from "@/components/ManageEvent.vue";
 import { EventPayload, SocietyPayload } from "@/types";
 import {
@@ -106,6 +102,7 @@ export default defineComponent({
     NButton,
     NTabPane,
     ManageEvent,
+    CreateEvent,
   },
   data: function () {
     return {
@@ -161,8 +158,8 @@ export default defineComponent({
     },
     assignFromManager() {
       this.description = this.ManagingSociety.description;
-      this.metadata.Instagram = this.ManagingSociety.metadata.Instagram;
-      this.metadata.Whatsapp = this.ManagingSociety.metadata.Whatsapp;
+      this.metadata.Instagram = this.ManagingSociety.metadata?.Instagram || "";
+      this.metadata.Whatsapp = this.ManagingSociety.metadata?.Whatsapp || "";
       this.societyID = this.ManagingSociety.society_id;
     },
     handleChooseEvent(option: string) {

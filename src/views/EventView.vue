@@ -2,6 +2,7 @@
   <div class="home">
     <div class="results">
       <EventCard individual v-if="item" :data="item" />
+      <EventCardSkel v-if="loading" />
     </div>
   </div>
 </template>
@@ -9,11 +10,12 @@
 <script lang="ts">
 import EventCard from "@/components/EventCard.vue"; // @ is an alias to /src
 import { defineComponent } from "vue";
-
+import EventCardSkel from "@/components/EventCardSkel.vue";
 export default defineComponent({
   name: "SearchView",
   components: {
     EventCard,
+    EventCardSkel,
   },
   async mounted() {
     const options = {
@@ -25,6 +27,7 @@ export default defineComponent({
     await fetch("/api/event", options)
       .then((response) => response.json())
       .then((response) => (this.item = response))
+      .then(() => (this.loading = false))
       .catch((err) => console.error(err));
   },
   methods: {
@@ -36,6 +39,7 @@ export default defineComponent({
     console.log(process.env);
     return {
       item: null,
+      loading: true,
     };
   },
 });

@@ -81,7 +81,7 @@ module.exports = class db {
       return client
         .query(query, params)
         .then((res) => {
-          console.log("result");
+          console.log("result", res.rows);
           client.release();
           return res.rows[0];
         })
@@ -94,5 +94,4 @@ module.exports = class db {
   addSearchable(data) {
     return index.saveObject(data);
   }
-
 };

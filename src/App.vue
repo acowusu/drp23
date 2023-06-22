@@ -12,13 +12,23 @@ export default defineComponent({
 <template>
   <n-message-provider>
     <nav>
-      <router-link to="/today">Today's events</router-link> |
-      <router-link to="/subscriptions">Subscriptions</router-link> |
-      <router-link to="/">Browse Events</router-link> |
-      <router-link to="/myevents">My Events</router-link> |
-      <router-link to="/societyhomepage">Edit Society</router-link>|
-      <router-link to="/account">Account</router-link> |
-      <router-link to="/messages">Announcements</router-link>
+      <router-link data-test="/today" to="/today">Today's events</router-link> |
+      <router-link data-test="/subscriptions" to="/subscriptions"
+        >Subscriptions</router-link
+      >
+      |
+      <router-link data-test=">Browse" to="/"
+        >Browse Events and Societies</router-link
+      >
+      |
+      <router-link data-test="/myevents" to="/myevents">My Events</router-link>
+      |
+      <router-link data-test="/societyhomepage" to="/societyhomepage"
+        >Edit Society</router-link
+      >| <router-link data-test="/account" to="/account">Account</router-link> |
+      <router-link data-test="/messages" to="/messages"
+        >Announcements</router-link
+      >
     </nav>
     <router-view />
   </n-message-provider>

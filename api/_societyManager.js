@@ -1,3 +1,5 @@
+const { kv } = require("@vercel/kv");
+
 module.exports = class {
   constructor({ db }) {
     this.db = db;
@@ -26,13 +28,21 @@ module.exports = class {
         })
       );
   }
-  get({ name }) {
-    return this.db.getRow(
-      `SELECT s.society_id, s.name, s.type, s.description, s.metadata
-      FROM society s
-      WHERE s.name = $1`,
-      [name]
-    );
+  async get({ name }) {
+    let society = await kv.get(`society_${name}`);
+    if (society?.society_id) {
+      console.log("cache hit");
+      return society;
+    } else {
+      society = await this.db.getRow(
+        `SELECT s.society_id, s.name, s.type, s.description, s.metadata
+        FROM society s
+        WHERE s.name = $1`,
+        [name]
+      );
+      await kv.set(`society_${name}`, society);
+      return society;
+    }
   }
   getID({ society_id }) {
     return this.db.getRow(
@@ -50,8 +60,8 @@ module.exports = class {
       [name, type]
     );
   }
-  update({ name, description, metadata }) {
-    return this.db
+  async update({ name, description, metadata }) {
+    return await this.db
       .getRow(
         `
       UPDATE society
@@ -61,8 +71,8 @@ module.exports = class {
       `,
         [description, metadata, name]
       )
-      .then((society) => {
-        return this.db.getIndex().saveObject({
+      .then(async (society) => {
+        await this.db.getIndex().saveObject({
           objectID: society.society_id,
           society_id: society.society_id,
           name: society.name,
@@ -71,6 +81,8 @@ module.exports = class {
           metadata: society.metadata,
           tags: [society.type],
         });
+        await kv.set(`society_${name}`, society);
+        return society;
       });
   }
 };

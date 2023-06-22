@@ -1,3 +1,5 @@
+const { kv } = require("@vercel/kv");
+
 module.exports = class {
   constructor({ db }) {
     this.db = db;
@@ -18,8 +20,8 @@ module.exports = class {
        e.latitude,
        e.longitude
       FROM events e
-      JOIN eventTags et ON e.event_id = et.event_id
-      JOIN tags t ON et.tag_id = t.tag_id
+      LEFT JOIN eventTags et ON e.event_id = et.event_id
+      LEFT JOIN tags t ON et.tag_id = t.tag_id
       WHERE 
        e.society = $1 `,
         [society]
@@ -81,12 +83,14 @@ module.exports = class {
     );
   }
 
-  getEvent({ event_id = null }) {
+  async getEvent({ event_id = null }) {
     if (event_id == null) {
       throw "An Event ID MUST be given";
     }
-    return this.db
-      .getRow(
+    let event = await kv.get(`event_${event_id}`);
+    console.log(event);
+    if (!event?.event_id) {
+      event = await this.db.getRow(
         `SELECT
       e.event_id,
       e.name,
@@ -101,9 +105,9 @@ module.exports = class {
       string_agg(t.tag_name, ';') AS tags
     FROM
       events e
-    JOIN
+    LEFT JOIN
       eventTags et ON e.event_id = et.event_id
-    JOIN
+    LEFT JOIN
       tags t ON et.tag_id = t.tag_id
     WHERE
       e.event_id = $1
@@ -120,11 +124,20 @@ module.exports = class {
       e.longitude;
     `,
         [event_id]
-      )
-      .then((row) => {
-        row.tags = row.tags.split(";");
-        return row;
-      });
+      );
+      if (!event) {
+        throw "Event not found";
+      }
+      console.log("event is ", event);
+      event.tags = event?.tags ? event.tags.split(";") : [];
+
+      console.log("from db", event);
+      await kv.set(`event_${event_id}`, event);
+      return event;
+    } else {
+      console.log("from cache");
+      return event;
+    }
   }
   allEvents() {
     return this.db
@@ -143,9 +156,9 @@ module.exports = class {
       string_agg(t.tag_name, ';') AS tags
     FROM
       events e
-    JOIN
+    LEFT JOIN
       eventTags et ON e.event_id = et.event_id
-    JOIN
+    LEFT JOIN
       tags t ON et.tag_id = t.tag_id
     GROUP BY
       e.event_id,
@@ -163,7 +176,7 @@ module.exports = class {
       )
       .then((rows) => {
         rows.forEach((row) => {
-          row.tags = row.tags.split(";");
+          row.tags = row.tags?.split(";") || [];
           row.objectID = row.event_id;
           row.timestamp = row.date_time.valueOf();
         });
@@ -187,9 +200,9 @@ module.exports = class {
       string_agg(t.tag_name, ';') AS tags
     FROM
       events e
-    JOIN
+    LEFT JOIN
       eventTags et ON e.event_id = et.event_id
-    JOIN
+    LEFT JOIN
       tags t ON et.tag_id = t.tag_id
     WHERE
     CAST(e.date_time AS DATE) = CURRENT_DATE
@@ -209,7 +222,7 @@ module.exports = class {
       )
       .then((rows) => {
         rows.forEach((row) => {
-          row.tags = row.tags.split(";");
+          row.tags = row?.tags ? row.tags.split(";") : [];
         });
         return rows;
       });
