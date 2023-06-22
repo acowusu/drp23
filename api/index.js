@@ -4,7 +4,7 @@ require("isomorphic-fetch");
 const app = require("express")();
 // app.use(bodyParser.json());
 
-const { v4 } = require("uuid");
+const {v4} = require("uuid");
 const subscriptions = require("./_subscriptions.js");
 const society = require("./_society.js");
 const user = require("./_user.js");
@@ -39,7 +39,5 @@ app.post("/api/update_society", updateSociety);
 app.post("/api/scrape_union", scrapeUnion);
 app.post("/api/messages", messages);
 app.post("/api/attending", attending);
-app.get("/api/", (req, res) => {
-  res.send("Hello World!");
-});
+app.get("/api/", (req, res) => { res.send("Hello World!"); });
 module.exports = app;

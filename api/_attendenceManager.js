@@ -1,30 +1,27 @@
 module.exports = class {
-  constructor({ db }) {
-    this.db = db;
-  }
+  constructor({db}) { this.db = db; }
 
-  async getCount({ event_id }) {
+  async getCount({event_id}) {
     const client = await this.db.getClient();
     try {
       await client.query("BEGIN");
       const result = await client.query(
-        /*sql */ `
+          /*sql */ `
         SELECT COUNT(*) FROM attending
         WHERE event_id = $1`,
-        [event_id]
-      );
+          [ event_id ]);
       return result.rows[0].count;
     } catch (e) {
       await client.query("ROLLBACK");
       throw e;
     }
   }
-  async getAttending({ email }) {
+  async getAttending({email}) {
     const client = await this.db.getClient();
     try {
       await client.query("BEGIN");
       const user_result = await client.query(
-        /*sql */ `
+          /*sql */ `
         SELECT e.event_id,
        e.name,
        e.description,
@@ -41,24 +38,22 @@ module.exports = class {
        LEFT JOIN tags t ON et.tag_id = t.tag_id
        WHERE attending.user_id = (SELECT user_id FROM users WHERE email = $1)
           `,
-        [email]
-      );
+          [ email ]);
       return user_result.rows.splice(0, user_result.rowCount);
     } catch (e) {
       await client.query("ROLLBACK");
       throw e;
     }
   }
-  async create({ user_id, event_id }) {
+  async create({user_id, event_id}) {
     const client = await this.db.getClient();
     try {
       await client.query("BEGIN");
       const user_result = await client.query(
-        /*sql */ `
+          /*sql */ `
         INSERT INTO attending (user_id, event_id)
         VALUES ($1, $2) RETURNING event_id`,
-        [user_id, event_id]
-      );
+          [ user_id, event_id ]);
       event_id = user_result.rows[0].event_id;
       await client.query("COMMIT");
       return event_id;
@@ -69,17 +64,16 @@ module.exports = class {
       client.release();
     }
   }
-  async delete({ user_id, event_id }) {
+  async delete({user_id, event_id}) {
     const client = await this.db.getClient();
     try {
       await client.query("BEGIN");
       const user_result = await client.query(
-        /*sql */ `
+          /*sql */ `
         DELETE FROM  attending 
         WHERE  user_id = $1 AND event_id =  $2
         RETURNING event_id`,
-        [user_id, event_id]
-      );
+          [ user_id, event_id ]);
       event_id = user_result.rows[0].event_id;
       await client.query("COMMIT");
       return event_id;
