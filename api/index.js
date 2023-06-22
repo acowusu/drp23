@@ -2,7 +2,7 @@ const bodyParser = require("body-parser");
 require("isomorphic-fetch");
 
 const app = require("express")();
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 
 const { v4 } = require("uuid");
 const subscriptions = require("./_subscriptions.js");
