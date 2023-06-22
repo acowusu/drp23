@@ -56,7 +56,7 @@
 import EventCard from "@/components/EventCard.vue";
 import EventCardSkel from "@/components/EventCardSkel.vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { NButton, NDivider, NSkeleton } from "naive-ui";
+import { NButton, NDivider, NSkeleton, useMessage } from "naive-ui";
 import { defineComponent } from "vue";
 import { mapActions, mapGetters } from "vuex";
 
@@ -79,16 +79,18 @@ export default defineComponent({
       items: [],
       loadedSociety: false,
       loadedEvents: false,
+      starred: false,
+      messages: useMessage(),
     };
   },
   computed: {
     ...mapGetters(["SubscribedIds"]),
-    starred() {
-      /* eslint-disable */
+    // starred() {
+    //   /* eslint-disable */
 
-      return this.SubscribedIds?.has(this?.id);
-      /* eslint-enable */
-    },
+    //   return this.SubscribedIds?.has(this?.id);
+    //   /* eslint-enable */
+    // },
   },
   methods: {
     ...mapActions(["subscribe", "unsubscribe"]),
@@ -96,9 +98,12 @@ export default defineComponent({
     starEvent() {
       if (this.starred) {
         this.unsubscribe(this.name);
+        this.messages.success("Unsubscribed from " + this.name);
       } else {
         this.subscribe(this.name);
+        this.messages.success("Subscribed to " + this.name);
       }
+      this.starred = !this.starred;
     },
     async loadSociety() {
       const content = {
