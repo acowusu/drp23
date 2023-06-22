@@ -1,7 +1,7 @@
 const Database = require("./_db");
 const db = new Database();
-import EventSearher from "./_eventSearcher";
-import SocietyManager from "./_societyManager";
+const EventSearher = require("./_eventSearcher");
+const SocietyManager = require("./_societyManager");
 const eventSearcher = new EventSearher({ db });
 const societyManager = new SocietyManager({ db });
 const fs = require("fs");

@@ -88,7 +88,7 @@ function handleDelete(message) {
       <n-alert
         :type="index == 0 ? 'info' : ''"
         :closable="index != 0 && canSend"
-        :on-close="handleDelete(message)"vue 
+        :on-close="handleDelete(message)"
         @on-after-leave="console.log"
         :title="formatDate(message.timestamp)"
       >
