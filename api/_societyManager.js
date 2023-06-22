@@ -1,4 +1,3 @@
-
 const { kv } = require("@vercel/kv");
 
 module.exports = class {
