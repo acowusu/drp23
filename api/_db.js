@@ -94,5 +94,4 @@ module.exports = class db {
   addSearchable(data) {
     return index.saveObject(data);
   }
-
 };
