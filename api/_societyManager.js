@@ -9,7 +9,7 @@ module.exports = class {
     return this.db
       .getRows(
         /*sql */ `
-      SELECT 
+      SELECT
       s.society_id  ,
        s.name,
         s.type,

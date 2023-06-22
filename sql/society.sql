@@ -283,10 +283,10 @@ INSERT INTO society (society_id, name, type, description, metadata)
           </p><p><a href="
           https://eactivities.union.ic.ac.uk/admin/csp/documents/con/pdf/544">Our Constitution</a></p><p>
           </p><h4>Our Team</h4><p>
-          
+
           </p><p>Tina Wang - President</p><p>Chloe Loh - Vice-President</p><p>Alice Cherdel - Junior Treasurer</p><p>Rhéa Park - Secretary and Sponsorships Officer</p><p>Emma Smith - Concert Officer</p><p>
 
-            
+
           </p>', '{"Instagram": "@icartsoc", "Whatsapp": "", "image": ""}');
 
 INSERT INTO society (society_id, name, type, description, metadata)
@@ -490,10 +490,10 @@ Send us a message on our Instagram to get signed up to our mailing list!
           </p><p><a href="
           https://eactivities.union.ic.ac.uk/admin/csp/documents/con/pdf/571">Our Constitution</a></p><p>
           </p><h4>Our Team</h4><p>
-          
+
           </p><p>Leon Zhang - President</p><p>Wenxing Zheng - Vice-President</p><p>Li Song - Junior Treasurer</p><p>Yaya Caird - Secretary</p><p>Sherry Zhou - Publicity Officer</p><p>Jon Cheng - Sports Officer</p><p>
 
-            
+
           </p>', '{"Instagram": "https://www.instagram.com/ic_abacus/"}');
 
 INSERT INTO society (society_id, name, type, description, metadata)
@@ -597,10 +597,10 @@ You can look forward to Arabic lessons, dinners, games nights, talks and extensi
           </p><p><a href="
           https://eactivities.union.ic.ac.uk/admin/csp/documents/con/pdf/52">Our Constitution</a></p><p>
           </p><h4>Our Team</h4><p>
-          
+
           </p><p>Ameen Izhac - Secretary</p><p>
 
-            
+
           </p>', '{"Instagram": "", "Whatsapp": "", "image": ""}');
 
 INSERT INTO society (society_id, name, type, description, metadata)
@@ -720,10 +720,10 @@ To get in touch, please send an email to docsoc@imperial.ac.uk.
           <a href="
           https://eactivities.union.ic.ac.uk/admin/csp/documents/con/pdf/875">Our Constitution</a>
           <h4>Our Team</h4>
-          
+
           <p>Jacob Bailey - Events Officer</p><p>Rishav Chatterjee - Software Development Coordinator</p><p>Aaryan Dharmadhikari - Social Events Coordinator</p><p>Daniel Gregory - Events Officer</p><p>Jordan Hall - Academic Events Coordinator</p><p>Jyry Hjelt - Events Officer</p><p>Jaiditya Khemani - Postgraduate and Alumni Liaison</p><p>Timothy Moores - Webmaster</p><p>Catalina Olteanu - Events Officer</p><p>Alex Owusu - President</p><p>Alex Owusu - Vice President</p><p>Kia Popat - Treasurer</p><p>Pratyaksh Sharma - Marketing & Publicity Officer</p><p>Adrian Wong - Secretary</p><p>Haotian Wu - Sponsor Liaison and Industrial Events Coordinator</p><p>Kai Ye - Sponsor Liaison and Industrial Events Coordinator</p><p>Khemi Chew - Hackathons Coordinator</p>
 
-            
+
           ', '{"Instagram": ""}');
 
 INSERT INTO society (society_id, name, type, description, metadata)
@@ -1298,4 +1298,3 @@ INSERT INTO society (society_id, name, type, description, metadata)
 
 INSERT INTO society (society_id, name, type, description, metadata)
     VALUES ('b392771d-53d7-4d54-bc49-7b0cd27e51b6', 'Water Polo (ICSM)', 'Sports', 'Water Polo (ICSM): The Water Polo society at ICSM (Imperial College School of Medicine) is a vibrant community that brings together students passionate about the sport. They organize regular training sessions, friendly matches, and competitive tournaments, both within the college and against other universities. Participants enhance their water polo skills, build teamwork and camaraderie, and enjoy the physical and mental challenges the sport offers. The society provides a supportive environment for both beginners and experienced players to improve their game and create lasting memories.', NULL);
-

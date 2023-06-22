@@ -75,7 +75,7 @@ module.exports = class {
       await client.query("BEGIN");
       const user_result = await client.query(
         /*sql */ `
-        DELETE FROM  attending 
+        DELETE FROM  attending
         WHERE  user_id = $1 AND event_id =  $2
         RETURNING event_id`,
         [user_id, event_id]

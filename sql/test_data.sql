@@ -50,7 +50,7 @@ INSERT INTO events (event_id, name, description, image_url, society, location, l
     VALUES ('ffffffff-ffff-ffff-ffff-fffffffffff5', 'Tech Conference', 'Learn about the latest advancements in technology
 
 
-    
+
     Welcome to the cutting-edge world of technology! Join us at the Tech Innovators Conference, where we bring together the brightest minds, industry leaders, and tech enthusiasts from around the globe. Prepare to embark on an unforgettable journey of discovery, collaboration, and inspiration.
 
 At the Tech Innovators Conference, we aim to ignite your imagination and empower you with the latest trends, breakthroughs, and innovations in the ever-evolving tech landscape. Our conference is a melting pot of ideas, where attendees can explore the frontiers of technology and shape the future together.
@@ -70,4 +70,3 @@ INSERT INTO eventTags (event_id, tag_id)
 INSERT INTO users (user_id, email)
     VALUES ('dd3dcdcb-d3f7-466e-b82a-8711a216ec2c', 'ao921@ic.ac.uk');
 COMMIT;
-

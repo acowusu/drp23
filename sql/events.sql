@@ -17,7 +17,7 @@ INSERT INTO events (event_id, name, description, image_url, society, location, l
     VALUES ('ffffffff-ffff-ffff-ffff-fffffffffff5', 'Tech Conference', 'Learn about the latest advancements in technology
 
 
-    
+
     Welcome to the cutting-edge world of technology! Join us at the Tech Innovators Conference, where we bring together the brightest minds, industry leaders, and tech enthusiasts from around the globe. Prepare to embark on an unforgettable journey of discovery, collaboration, and inspiration.
 
 At the Tech Innovators Conference, we aim to ignite your imagination and empower you with the latest trends, breakthroughs, and innovations in the ever-evolving tech landscape. Our conference is a melting pot of ideas, where attendees can explore the frontiers of technology and shape the future together.
@@ -27,4 +27,3 @@ Immerse yourself in a captivating atmosphere buzzing with excitement and anticip
 Our agenda is carefully crafted to cater to diverse interests and expertise. Engage in thought-provoking keynote presentations by visionaries who have revolutionized industries and reshaped the world we live in. Get up close and personal with experts during interactive panel discussions, fireside chats, and workshops, where you can delve into the nitty-gritty of emerging technologies, best practices, and successful implementation strategies.
 
 The Tech Innovators Conference provides a vibrant platform for networking and forging meaningful connections. Connect with industry leaders, entrepreneurs, investors, and innovators during dedicated networking sessions, where you can share ideas, explore potential collaborations, and build invaluable relationships that may shape your future endeavors.', 'https://picsum.photos/seed/tech/1920/1080', 'Computing', 'Conference Center', 40.728200, -74.077600, '2023-08-05 09:00:00.000000', 50.00);
-

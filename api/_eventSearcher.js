@@ -22,7 +22,7 @@ module.exports = class {
       FROM events e
       LEFT JOIN eventTags et ON e.event_id = et.event_id
       LEFT JOIN tags t ON et.tag_id = t.tag_id
-      WHERE 
+      WHERE
        e.society = $1 `,
         [society]
       )
