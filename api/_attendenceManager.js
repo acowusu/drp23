@@ -37,8 +37,8 @@ module.exports = class {
        e.longitude
        FROM events e
        JOIN attending on attending.event_id = e.event_id
-       JOIN eventTags et ON e.event_id = et.event_id
-       JOIN tags t ON et.tag_id = t.tag_id
+       LEFT JOIN eventTags et ON e.event_id = et.event_id
+       LEFT JOIN tags t ON et.tag_id = t.tag_id
        WHERE attending.user_id = (SELECT user_id FROM users WHERE email = $1)
           `,
         [email]

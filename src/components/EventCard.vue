@@ -1,10 +1,13 @@
 <template>
-  <n-card :title="data.name">
+  <n-card :title="data.name" :data-test="data.objectID">
     <template #cover>
       <img :src="data.image_url" />
     </template>
     <template #header-extra v-if="data.society != ''">
-      <router-link :to="{ path: `/society/${data.society}` }">
+      <router-link
+        :to="{ path: `/society/${data.society}` }"
+        :data-test="`SOC_${data.objectID}`"
+      >
         {{ data.society }}
       </router-link></template
     >
@@ -20,12 +23,23 @@
     >
     <n-tooltip trigger="hover">
       <template #trigger>
-        <n-button text class="event-star" @click="starEvent" v-if="!starred">
+        <n-button
+          text
+          class="event-star"
+          @click="starEvent"
+          v-if="!starred"
+          :data-test="`US_${data.objectID}`"
+        >
           <n-icon>
             <font-awesome-icon icon="fa-regular fa-star" />
           </n-icon>
         </n-button>
-        <n-button text class="event-star" @click="starEvent" v-else
+        <n-button
+          text
+          class="event-star"
+          @click="starEvent"
+          v-else
+          :data-test="`SU_${data.objectID}`"
           ><n-icon>
             <font-awesome-icon icon="fa-solid fa-star" />
           </n-icon>
@@ -41,6 +55,7 @@
           class="event-attend"
           @click="updateAttending"
           v-if="!isAttending"
+          :data-test="`ATT_${data.objectID}`"
         >
           <n-icon>
             <font-awesome-icon icon="fa-regular  fa-thumbs-up" />
@@ -51,6 +66,7 @@
           text
           class="event-attend"
           @click="updateAttending"
+          :data-test="`DISACSOC_${data.objectID}`"
           v-else
           ><n-icon>
             <font-awesome-icon icon="fa-solid  fa-thumbs-up" />
@@ -60,7 +76,12 @@
       Let the Organizer know that you're attending!
     </n-tooltip>
     <n-divider />
-    <n-ellipsis expand-trigger="click" line-clamp="2" :tooltip="false">
+    <n-ellipsis
+      expand-trigger="click"
+      line-clamp="2"
+      :tooltip="false"
+      :data-test="`ELIP_${data.objectID}`"
+    >
       {{ data.description }}
     </n-ellipsis>
     <n-divider />
@@ -74,6 +95,7 @@
       <router-link
         v-if="!individual"
         :to="`/event/${data?.event_id || data?.objectID}`"
+        :data-test="`VIEW_${data.objectID}`"
       >
         view
       </router-link>
@@ -93,6 +115,7 @@ import {
   NSpace,
   NTag,
   NTooltip,
+  useMessage,
 } from "naive-ui";
 import { defineComponent } from "vue";
 import { mapActions, mapGetters } from "vuex";
@@ -125,6 +148,7 @@ export default defineComponent({
       starred: localStorage.getItem(this.data.event_id) == "starred_drp18",
       society_id: "",
       disableAttending: false,
+      message: useMessage(),
     };
   },
 
@@ -143,10 +167,17 @@ export default defineComponent({
     },
     async updateAttending() {
       this.disableAttending = true;
-      if (!this.isAttending) {
-        await this.attendEvent(this.data);
-      } else {
-        await this.unattendEvent(this.data);
+      try {
+        if (!this.isAttending) {
+          await this.attendEvent(this.data);
+          this.message.success("You are now attending this event");
+        } else {
+          await this.unattendEvent(this.data);
+          this.message.success("You are no longer attending this event");
+        }
+      } catch (error) {
+        console.log(error);
+        this.message.error("Something went wrong");
       }
       this.disableAttending = false;
     },
@@ -155,10 +186,12 @@ export default defineComponent({
         localStorage.removeItem(this.data.event_id);
         this.removeEvent(this.data);
         this.starred = false;
+        this.message.success("Event removed from starred events");
       } else {
         this.saveEvent(this.data);
         localStorage.setItem(this.data.event_id, "starred_drp18");
         this.starred = true;
+        this.message.success("Event added to starred events");
       }
     },
   },

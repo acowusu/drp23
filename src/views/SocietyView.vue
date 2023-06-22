@@ -4,12 +4,23 @@
     <n-skeleton text height="30px" width="20%" v-else />
     <h3 v-if="loadedSociety">{{ type }}</h3>
     <n-skeleton text height="20px" width="20%" v-else />
-    <n-button text class="event-star" @click="starEvent" v-if="!starred">
+    <n-button
+      text
+      class="event-star"
+      @click="starEvent"
+      v-if="!starred"
+      :data-test="`STR_${id}`"
+    >
       <n-icon>
         <font-awesome-icon icon="fa-regular fa-star" />
       </n-icon>
     </n-button>
-    <n-button text class="event-star" @click="starEvent" v-else
+    <n-button
+      text
+      class="event-star"
+      @click="starEvent"
+      v-else
+      :data-test="`USTR_${id}`"
       ><n-icon>
         <font-awesome-icon icon="fa-solid fa-star" />
       </n-icon>
@@ -44,10 +55,10 @@
 <script lang="ts">
 import EventCard from "@/components/EventCard.vue";
 import EventCardSkel from "@/components/EventCardSkel.vue";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { NButton, NDivider, NSkeleton } from "naive-ui";
 import { defineComponent } from "vue";
 import { mapActions, mapGetters } from "vuex";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 export default defineComponent({
   components: {
@@ -58,7 +69,7 @@ export default defineComponent({
     NButton,
     FontAwesomeIcon,
   },
-  data: function () {
+  data: () => {
     return {
       id: "",
       name: "",
@@ -73,8 +84,10 @@ export default defineComponent({
   computed: {
     ...mapGetters(["SubscribedIds"]),
     starred() {
-      return false;
-      // return   this.SubscribedIds.has(this.id);
+      /* eslint-disable */
+
+      return this.SubscribedIds?.has(this?.id);
+      /* eslint-enable */
     },
   },
   methods: {

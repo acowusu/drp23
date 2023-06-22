@@ -10,7 +10,8 @@ module.exports = async (req, res) => {
 
   try {
     const user_id = await userManager.getId({ email });
-    console.log(user_id);
+    console.log("USER: ", user_id);
+    console.log("EVENT: ", event_id);
     let result;
     if (attending) {
       result = await Manager.create({
