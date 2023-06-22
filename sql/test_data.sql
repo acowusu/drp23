@@ -1,43 +1,53 @@
 BEGIN;
 -- Clear the old data
-DELETE FROM eventTags WHERE 1=1;
-DELETE FROM tags WHERE 1=1;
-DELETE FROM attending WHERE 1=1;
-DELETE FROM events WHERE 1=1;
-DELETE FROM subscription WHERE 1=1;
-DELETE FROM society WHERE 1=1;
-DELETE FROM users WHERE 1=1;
-
+DELETE FROM eventTags
+WHERE 1 = 1;
+DELETE FROM tags
+WHERE 1 = 1;
+DELETE FROM attending
+WHERE 1 = 1;
+DELETE FROM events
+WHERE 1 = 1;
+DELETE FROM subscription
+WHERE 1 = 1;
+DELETE FROM society
+WHERE 1 = 1;
+DELETE FROM users
+WHERE 1 = 1;
 -- IF type_id('testing_db.public.societytype') IS NOT NULL
 --         DROP TYPE testing_db.public.societytype;
-
 -- Inserting data into the tags table
-INSERT INTO tags (tag_id, tag_name) VALUES
-    ('ffffffff-ffff-ffff-ffff-fffffffffff1','Music'),
-    ('ffffffff-ffff-ffff-ffff-fffffffffff2','Sports'),
-    ('ffffffff-ffff-ffff-ffff-fffffffffff3','Art'),
-    ('ffffffff-ffff-ffff-ffff-fffffffffff4','Food'),
-    ('ffffffff-ffff-ffff-ffff-fffffffffff5','Technology'),
-    ('ffffffff-ffff-ffff-ffff-fffffffffff6' ,'Academic Related'),
-    ('ffffffff-ffff-ffff-ffff-fffffffffff7' ,'Arts & Entertainment'),
-    ('ffffffff-ffff-ffff-ffff-fffffffffff8' ,'Charitable'),
-    ('ffffffff-ffff-ffff-ffff-fffffffffff9' ,'Cultural'),
-    ('ffffffff-ffff-ffff-ffff-ffffffffff10' ,'Departmental'),
-    ('ffffffff-ffff-ffff-ffff-ffffffffff11' ,'Faith'),
-    ('ffffffff-ffff-ffff-ffff-ffffffffff12' ,'Indoor'),
-    ('ffffffff-ffff-ffff-ffff-ffffffffff13' ,'Martial Arts'),
-    ('ffffffff-ffff-ffff-ffff-ffffffffff14' ,'Media'),
-    ('ffffffff-ffff-ffff-ffff-ffffffffff15' ,'Outdoor'),
-    ('ffffffff-ffff-ffff-ffff-ffffffffff16' ,'Social'),
-    ('ffffffff-ffff-ffff-ffff-ffffffffff17' ,'Sports');
-
+INSERT INTO tags (tag_id, tag_name)
+    VALUES ('ffffffff-ffff-ffff-ffff-fffffffffff1', 'Music'),
+    ('ffffffff-ffff-ffff-ffff-fffffffffff2', 'Sports'),
+    ('ffffffff-ffff-ffff-ffff-fffffffffff3', 'Art'),
+    ('ffffffff-ffff-ffff-ffff-fffffffffff4', 'Food'),
+    ('ffffffff-ffff-ffff-ffff-fffffffffff5', 'Technology'),
+    ('ffffffff-ffff-ffff-ffff-fffffffffff6', 'Academic Related'),
+    ('ffffffff-ffff-ffff-ffff-fffffffffff7', 'Arts & Entertainment'),
+    ('ffffffff-ffff-ffff-ffff-fffffffffff8', 'Charitable'),
+    ('ffffffff-ffff-ffff-ffff-fffffffffff9', 'Cultural'),
+    ('ffffffff-ffff-ffff-ffff-ffffffffff10', 'Departmental'),
+    ('ffffffff-ffff-ffff-ffff-ffffffffff11', 'Faith'),
+    ('ffffffff-ffff-ffff-ffff-ffffffffff12', 'Indoor'),
+    ('ffffffff-ffff-ffff-ffff-ffffffffff13', 'Martial Arts'),
+    ('ffffffff-ffff-ffff-ffff-ffffffffff14', 'Media'),
+    ('ffffffff-ffff-ffff-ffff-ffffffffff15', 'Outdoor'),
+    ('ffffffff-ffff-ffff-ffff-ffffffffff16', 'Social'),
+    ('ffffffff-ffff-ffff-ffff-ffffffffff17', 'Sports');
 -- Inserting data into the events table
-INSERT INTO events (event_id, name, description, image_url, society, location, latitude, longitude, date_time, ticket_price) VALUES ('d4f9b45e-89d1-442c-be70-9b425733771b', 'End of year party', ' Join us for DoCSoc''s last event of the year, the Summer Party! Tickets will be released at 1 pm tomorrow (Sunday) on the union shop (see link in our bio). Tickets include a BBQ dinner, 5 drinks tokens (2 cocktails, 3 beer/wine/ spirittmixer) and a photo booth! Each drinks token can also be redeemed for a soft drink.', 'https://firebasestorage.googleapis.com/v0/b/drp-whatson.appspot.com/o/imfieyz4d2?alt=media&token=ab861c76-5a1e-4bf5-aacd-f4a45c009939', 'Computing', 'Kings suite', 0.000000, 0.000000, '2023-06-22 19:00:00.000000', 25.00);
-INSERT INTO events (event_id, name, description, image_url, society, location, latitude, longitude, date_time, ticket_price) VALUES ('ffffffff-ffff-ffff-ffff-fffffffffff1', 'Concert in the Park', 'Join us for a live music concert in the park', 'https://picsum.photos/seed/concert/1920/1080', 'Jazz, Soul and Funk', 'Central Park', 40.782900, -73.965400, '2023-06-15 19:30:00.000000', 25.99);
-INSERT INTO events (event_id, name, description, image_url, society, location, latitude, longitude, date_time, ticket_price) VALUES ('ffffffff-ffff-ffff-ffff-fffffffffff2', 'Football Tournament', 'Participate in the annual football tournament', 'https://picsum.photos/seed/football/1920/1080', 'Football - Mens', 'City Stadium', 40.712800, -74.006000, '2023-07-10 10:00:00.000000', 10.00);
-INSERT INTO events (event_id, name, description, image_url, society, location, latitude, longitude, date_time, ticket_price) VALUES ('ffffffff-ffff-ffff-ffff-fffffffffff3', 'Art Exhibition', 'Explore a collection of contemporary art', 'https://picsum.photos/seed/art/1920/1080', 'Art Club', 'Gallery XYZ', 40.740600, -73.990300, '2023-06-30 14:00:00.000000', 5.99);
-INSERT INTO events (event_id, name, description, image_url, society, location, latitude, longitude, date_time, ticket_price) VALUES ('ffffffff-ffff-ffff-ffff-fffffffffff4', 'Food Festival', 'Experience a variety of culinary delights', 'https://picsum.photos/seed/food/1920/1080', 'International Foodies Society', 'Town Square', 40.758900, -73.985100, '2023-07-22 12:00:00.000000', 0.00);
-INSERT INTO events (event_id, name, description, image_url, society, location, latitude, longitude, date_time, ticket_price) VALUES ('ffffffff-ffff-ffff-ffff-fffffffffff5', 'Tech Conference', 'Learn about the latest advancements in technology
+INSERT INTO events (event_id, name, description, image_url, society, location, latitude, longitude, date_time, ticket_price)
+    VALUES ('d4f9b45e-89d1-442c-be70-9b425733771b', 'End of year party', ' Join us for DoCSoc''s last event of the year, the Summer Party! Tickets will be released at 1 pm tomorrow (Sunday) on the union shop (see link in our bio). Tickets include a BBQ dinner, 5 drinks tokens (2 cocktails, 3 beer/wine/ spirittmixer) and a photo booth! Each drinks token can also be redeemed for a soft drink.', 'https://firebasestorage.googleapis.com/v0/b/drp-whatson.appspot.com/o/imfieyz4d2?alt=media&token=ab861c76-5a1e-4bf5-aacd-f4a45c009939', 'Computing', 'Kings suite', 0.000000, 0.000000, '2023-06-22 19:00:00.000000', 25.00);
+INSERT INTO events (event_id, name, description, image_url, society, location, latitude, longitude, date_time, ticket_price)
+    VALUES ('ffffffff-ffff-ffff-ffff-fffffffffff1', 'Concert in the Park', 'Join us for a live music concert in the park', 'https://picsum.photos/seed/concert/1920/1080', 'Jazz, Soul and Funk', 'Central Park', 40.782900, -73.965400, '2023-06-15 19:30:00.000000', 25.99);
+INSERT INTO events (event_id, name, description, image_url, society, location, latitude, longitude, date_time, ticket_price)
+    VALUES ('ffffffff-ffff-ffff-ffff-fffffffffff2', 'Football Tournament', 'Participate in the annual football tournament', 'https://picsum.photos/seed/football/1920/1080', 'Football - Mens', 'City Stadium', 40.712800, -74.006000, '2023-07-10 10:00:00.000000', 10.00);
+INSERT INTO events (event_id, name, description, image_url, society, location, latitude, longitude, date_time, ticket_price)
+    VALUES ('ffffffff-ffff-ffff-ffff-fffffffffff3', 'Art Exhibition', 'Explore a collection of contemporary art', 'https://picsum.photos/seed/art/1920/1080', 'Art Club', 'Gallery XYZ', 40.740600, -73.990300, '2023-06-30 14:00:00.000000', 5.99);
+INSERT INTO events (event_id, name, description, image_url, society, location, latitude, longitude, date_time, ticket_price)
+    VALUES ('ffffffff-ffff-ffff-ffff-fffffffffff4', 'Food Festival', 'Experience a variety of culinary delights', 'https://picsum.photos/seed/food/1920/1080', 'International Foodies Society', 'Town Square', 40.758900, -73.985100, '2023-07-22 12:00:00.000000', 0.00);
+INSERT INTO events (event_id, name, description, image_url, society, location, latitude, longitude, date_time, ticket_price)
+    VALUES ('ffffffff-ffff-ffff-ffff-fffffffffff5', 'Tech Conference', 'Learn about the latest advancements in technology
 
 
     
@@ -50,18 +60,14 @@ Immerse yourself in a captivating atmosphere buzzing with excitement and anticip
 Our agenda is carefully crafted to cater to diverse interests and expertise. Engage in thought-provoking keynote presentations by visionaries who have revolutionized industries and reshaped the world we live in. Get up close and personal with experts during interactive panel discussions, fireside chats, and workshops, where you can delve into the nitty-gritty of emerging technologies, best practices, and successful implementation strategies.
 
 The Tech Innovators Conference provides a vibrant platform for networking and forging meaningful connections. Connect with industry leaders, entrepreneurs, investors, and innovators during dedicated networking sessions, where you can share ideas, explore potential collaborations, and build invaluable relationships that may shape your future endeavors.', 'https://picsum.photos/seed/tech/1920/1080', 'Computing', 'Conference Center', 40.728200, -74.077600, '2023-08-05 09:00:00.000000', 50.00);
-
 -- Inserting data into the eventTags table
-INSERT INTO eventTags (event_id, tag_id) VALUES
-    ('ffffffff-ffff-ffff-ffff-fffffffffff1', 'ffffffff-ffff-ffff-ffff-fffffffffff1'),
+INSERT INTO eventTags (event_id, tag_id)
+    VALUES ('ffffffff-ffff-ffff-ffff-fffffffffff1', 'ffffffff-ffff-ffff-ffff-fffffffffff1'),
     ('ffffffff-ffff-ffff-ffff-fffffffffff2', 'ffffffff-ffff-ffff-ffff-fffffffffff2'),
     ('ffffffff-ffff-ffff-ffff-fffffffffff3', 'ffffffff-ffff-ffff-ffff-fffffffffff3'),
     ('ffffffff-ffff-ffff-ffff-fffffffffff4', 'ffffffff-ffff-ffff-ffff-fffffffffff4'),
     ('ffffffff-ffff-ffff-ffff-fffffffffff5', 'ffffffff-ffff-ffff-ffff-fffffffffff5');
-
-INSERT INTO users (user_id, email) VALUES ('dd3dcdcb-d3f7-466e-b82a-8711a216ec2c', 'ao921@ic.ac.uk');
-
-
+INSERT INTO users (user_id, email)
+    VALUES ('dd3dcdcb-d3f7-466e-b82a-8711a216ec2c', 'ao921@ic.ac.uk');
 COMMIT;
-
 
