@@ -1,12 +1,14 @@
-const {kv} = require("@vercel/kv");
+const { kv } = require("@vercel/kv");
 
 module.exports = class {
-  constructor({db}) { this.db = db; }
+  constructor({ db }) {
+    this.db = db;
+  }
 
-  eventsBySociety({society}) {
+  eventsBySociety({ society }) {
     return this.db
-        .getRows(
-            /*sql */ `
+      .getRows(
+        /*sql */ `
       SELECT e.event_id,
        e.name,
        e.description,
@@ -22,16 +24,17 @@ module.exports = class {
       LEFT JOIN tags t ON et.tag_id = t.tag_id
       WHERE 
        e.society = $1 `,
-            [ society ])
-        .then((row) => {
-          // row.tags = row.tags.split(";");
-          console.log(row);
-          return row;
-        });
+        [society]
+      )
+      .then((row) => {
+        // row.tags = row.tags.split(";");
+        console.log(row);
+        return row;
+      });
   }
   searchWithSociety() {
     return this.db.getRows(
-        /*sql */ `
+      /*sql */ `
       SELECT e.event_id,
        e.name,
        e.description,
@@ -51,12 +54,13 @@ module.exports = class {
         AND e.society = $3
         AND t.tag_name = ANY($4::varchar[])
 `,
-        [ this.startAt, this.endAt, this.society, this.tags ]);
+      [this.startAt, this.endAt, this.society, this.tags]
+    );
   }
   searchWithoutSociety() {
     console.log("searching");
     return this.db.getRows(
-        /*sql */ `
+      /*sql */ `
       SELECT e.event_id,
        e.name,
        e.description,
@@ -75,17 +79,19 @@ module.exports = class {
       WHERE e.date_time BETWEEN $1 AND $2
         AND t.tag_name = ANY($4::varchar[])
 `,
-        [ this.startAt, this.endAt, this.tags ]);
+      [this.startAt, this.endAt, this.tags]
+    );
   }
 
-  async getEvent({event_id = null}) {
+  async getEvent({ event_id = null }) {
     if (event_id == null) {
       throw "An Event ID MUST be given";
     }
     let event = await kv.get(`event_${event_id}`);
     console.log(event);
     if (!event?.event_id) {
-      event = await this.db.getRow(`SELECT
+      event = await this.db.getRow(
+        `SELECT
       e.event_id,
       e.name,
       e.description,
@@ -117,7 +123,8 @@ module.exports = class {
       e.latitude,
       e.longitude;
     `,
-                                   [ event_id ]);
+        [event_id]
+      );
       if (!event) {
         throw "Event not found";
       }
@@ -134,7 +141,8 @@ module.exports = class {
   }
   allEvents() {
     return this.db
-        .getRows(`SELECT
+      .getRows(
+        `SELECT
       e.event_id,
       e.name,
       e.description,
@@ -164,19 +172,21 @@ module.exports = class {
       e.latitude,
       e.longitude;
     `,
-                 [])
-        .then((rows) => {
-          rows.forEach((row) => {
-            row.tags = row.tags?.split(";") || [];
-            row.objectID = row.event_id;
-            row.timestamp = row.date_time.valueOf();
-          });
-          return rows;
+        []
+      )
+      .then((rows) => {
+        rows.forEach((row) => {
+          row.tags = row.tags?.split(";") || [];
+          row.objectID = row.event_id;
+          row.timestamp = row.date_time.valueOf();
         });
+        return rows;
+      });
   }
   eventsToday() {
     return this.db
-        .getRows(`SELECT
+      .getRows(
+        `SELECT
       e.event_id,
       e.name,
       e.description,
@@ -208,12 +218,14 @@ module.exports = class {
       e.latitude,
       e.longitude;
     `,
-                 [])
-        .then((rows) => {
-          rows.forEach(
-              (row) => { row.tags = row?.tags ? row.tags.split(";") : []; });
-          return rows;
+        []
+      )
+      .then((rows) => {
+        rows.forEach((row) => {
+          row.tags = row?.tags ? row.tags.split(";") : [];
         });
+        return rows;
+      });
   }
 
   search({
@@ -228,24 +240,24 @@ module.exports = class {
     this.tags = tags;
 
     const eventsMap = new Map();
-    return (this.society ? this.searchWithSociety()
-                         : this.searchWithoutSociety())
-        .then((rows) => {
-          console.log("rows", rows);
-          rows.forEach((row) => {
-            const {event_id, tag_id, tag_name, ...eventData} = row;
-            const event = eventsMap.get(event_id);
+    return (
+      this.society ? this.searchWithSociety() : this.searchWithoutSociety()
+    ).then((rows) => {
+      console.log("rows", rows);
+      rows.forEach((row) => {
+        const { event_id, tag_id, tag_name, ...eventData } = row;
+        const event = eventsMap.get(event_id);
 
-            if (event) {
-              event.tags.push({tag_id, tag_name});
-            } else {
-              eventsMap.set(event_id, {
-                ...eventData,
-                tags : [ {tag_id, tag_name} ],
-              });
-            }
+        if (event) {
+          event.tags.push({ tag_id, tag_name });
+        } else {
+          eventsMap.set(event_id, {
+            ...eventData,
+            tags: [{ tag_id, tag_name }],
           });
-          return Array.from(eventsMap.values());
-        });
+        }
+      });
+      return Array.from(eventsMap.values());
+    });
   }
 };
