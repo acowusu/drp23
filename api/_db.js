@@ -23,10 +23,10 @@ const config = {
   ssl: {
     rejectUnauthorized: false,
   },
-  //For secure connection:
-  // ssl: {
-  //   ca: fs.readFileSync(__dirname + "/ca.crt").toString(),
-  // },
+  // For secure connection:
+  //  ssl: {
+  //    ca: fs.readFileSync(__dirname + "/ca.crt").toString(),
+  //  },
 };
 module.exports = class db {
   constructor() {
